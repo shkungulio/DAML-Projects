@@ -1,5 +1,4 @@
 # Data-Analytics-and-Machine-Learning-Projects
-Data Analytics and Machine Learning Projects
 
 Welcome to my Data Analytics and Machine Learning portfolio repository! This collection showcases various projects that highlight my skills in data exploration, visualization, predictive modeling, and machine learning.
 
