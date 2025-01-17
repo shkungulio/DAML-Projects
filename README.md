@@ -11,5 +11,6 @@ Key Features:
 * Time Series Analysis: Forecasting trends and seasonality using ARIMA and Prophet.
 * Data Visualization: Creating impactful dashboards and charts using tools like Tableau, Power BI, and Python libraries.
 * Domain Applications: Projects include applications in healthcare, finance, and sports analytics.
+
 This repository demonstrates my passion for transforming data into actionable insights and my commitment to building robust, scalable machine-learning solutions. Feel free to explore the projects and reach out if you have any feedback or questions!
 
