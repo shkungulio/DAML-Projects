@@ -1,0 +1,46 @@
+---
+title: "Diamond Distribution Dashboard"
+output: flexdashboard::flex_dashboard
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(dplyr)
+knitr::opts_chunk$set(fig.width = 5, fig.asp = 1/3)
+```
+
+## Column 1
+
+### **Carat**
+
+```{r}
+ggplot(diamonds, aes(carat, fill = carat)) + 
+  geom_histogram(binwidth = 0.1) +
+  theme_test()
+```
+
+### **Cut**
+
+```{r}
+ggplot(diamonds, aes(cut)) + 
+  geom_bar() + theme_test()
+```
+
+### **Color**
+
+```{r}
+ggplot(diamonds, aes(color)) + 
+  geom_bar() + theme_test()
+```
+
+## Column 2
+
+### **The Largest Diamonds**
+
+```{r}
+diamonds %>%
+  arrange(desc(carat)) %>%
+  head(100) %>%
+  select(carat, cut, color, price) %>%
+  DT::datatable()
+```

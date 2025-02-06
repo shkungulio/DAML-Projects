@@ -1,0 +1,106 @@
+---
+title: "Iris Cluster Analysis"
+author: "Seif Kungulio"
+date: "2025-01-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### **Business Understanding**
+
+#### **Problem Statement**
+The goal is to segment the Iris dataset into meaningful clusters that represent patterns or groups based on flower attributes (sepal length, sepal width, petal length, and petal width). The key business question is:
+
+***How can we effectively categorize iris flowers based on their features to uncover natural groupings, and how does this align with the predefined species labels?***
+
+This analysis can help in various applications such as:
+
+- Enhancing botanical classification systems.
+- Training machine learning models for predictive tasks.
+- Providing insights into the natural clustering of biological data.
+
+### **Data Understanding**
+The Iris dataset is a widely-used dataset in data science and statistics for classification and clustering tasks. It includes 150 observations of iris flowers with four numerical attributes and one categorical attribute.
+
+#### **Data Dictionary**
+
+| **Variable Name** | **Description** | **Type** | **Units** |
+|:------------------|:----------------|:---------|:---------------------|
+| Sepal.Length | Length of the sepal | Numeric | Centimeters |
+| Sepal.Width | Width of the sepal | Numeric | Centimeters |
+| Petal.Length | Length of the petal | Numeric | Centimeters |
+| Petal.Width | Width of the petal | Numeric | Centimeters |
+| Species | Species of the iris flower | Categorical | Setosa, Versicolor, Virginica |
+
+### **Data Preparation**
+#### **Load Necessary Libraries**
+```{R}
+# Install necessary packages if not already installed
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2")
+}
+if (!requireNamespace("cluster", quietly = TRUE)) {
+  install.packages("cluster")
+}
+
+# Load the libraries
+library(ggplot2)
+library(cluster)
+```
+#### **Load the Dataset**
+```{R}
+# Load the Iris dataset
+data(iris)
+```
+#### **Exploratory Data Analysis**
+Check the first six rows of the loaded dataset
+```{R}
+head(iris)
+```
+Check the last six rows of the loaded dataset
+```{R}
+tail(iris)
+```
+Display the statistical summary of the Iris dataset
+```{R}
+summary(iris)
+```
+#### **Preprocess the Data**
+Since we are performing cluster analysis, it's important to remove the categorical variable (`Species`), as clustering algorithms typically work with numerical data.
+
+Remove the Species column for clustering purposes
+```{R}
+iris_data <- iris[, -5]  # Removing the 5th column (Species)
+```
+#### **Normalize the Data**
+Normalization ensures that all features contribute equally to the distance metric.
+```{R}
+# Normalize the data (scale to have mean = 0 and standard deviation = 1)
+iris_scaled <- scale(iris_data)
+```
+#### **Determine the optimal number of clusters (Elbow method)**
+We will use the elbow method to find the optimal number of clusters by plotting the total within-cluster sum of squares against the number of clusters.
+
+Elbow method to determine the optimal number of clusters
+```{R}
+wss <- numeric(15)  # Store WSS for k = 1 to 15
+for (i in 1:15) {
+  kmeans_model <- kmeans(iris_scaled, centers = i, nstart = 25)
+  wss[i] <- kmeans_model$tot.withinss
+}
+
+# Plot the Elbow curve
+plot(1:15, wss, type = "b", pch = 19, col = "blue", 
+     xlab = "Number of Clusters", 
+     ylab = "Total Within Sum of Squares")
+```
+
+
+### **Model Development**
+
+
+
+### **Evaluation**
