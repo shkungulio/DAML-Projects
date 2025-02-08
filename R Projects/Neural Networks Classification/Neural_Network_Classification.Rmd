@@ -53,12 +53,14 @@ library(ggplot2)
 
 Load the dataset and name it dividend.df
 ```{r}
-dividend.df <- read.csv("resource/dividend_info.csv")
+dividend.df <- read.csv("../resources/dividend_info.csv")
 ```
+
 Check the dimensions of the data frame
 ```{r}
 dim(dividend.df)
 ```
+
 Show the first six rows to check the data
 ```{r}
 head(dividend.df)
@@ -175,24 +177,41 @@ ggplot(dividend.df, aes(x = as.factor(dividend),
   scale_fill_manual(values = c("green", "red"))  # Set boxplot fill colors
 ```
 
-
-
-
-
-
-
-
-
-
-
-
 ### **Modeling**
+#### **Clean and Transform the Dataset**
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+Normalize the data
+```{r}
+# Max-min normalization
+normalize <- function(x) {
+  return ((x - min(x)) / (max(x) - min(x)))
+}
+# Run the function across the existing data 
+# Save the scaled dataset normalized.df 
+normalized.df <- as.data.frame(lapply(dividend.df, normalize))
 ```
+Partition the data into 60% training and 40% testing. Randomly select 60% of the row IDs for training and the remaining 40% will be the testing data.
+```{r}
+# Set seed for reproducibility 
+set.seed(123) 
+training.rows <- sample(1:nrow(normalized.df), nrow(normalized.df) * 0.6)
+```
+
+Organize all of the columns with the training row ID into the training set
+```{r}
+training.data <- normalized.df[training.rows, ] 
+head(training.data)
+```
+
+Assign row IDs that are not in the training set into the testing set
+```{r}
+testing.rows <- setdiff(1:nrow(normalized.df), training.rows) 
+testing.data <- normalized.df[-training.rows, ] 
+head(testing.data)
+```
+
+
+
 ### **Evaluation**
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
