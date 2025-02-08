@@ -1,0 +1,199 @@
+---
+title: "Neural Network Classification"
+author: "Seif Kungulio"
+date: "2025-02-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### **Business Understanding**
+#### **Problem Statement**
+In this analysis, we aim to predict if a stock will pay a dividend.
+
+### **Data Understanding**
+#### **Dataset Overview**
+The dataset contains six (6) variables on 200 stocks. Each row represents information on a different stock. The first or last column is typically the outcome variable in data mining. The data indicates if a stock had a dividend (Yes = 1; No = 0). In this case, "dividend" is the response variable in the first column.
+
+#### **Data Dictionary**
+
+| Variable | Definition                       | Data Type | Constraints/ Rules |
+|:---------|:---------------------------------|:----------|:-------------------|
+| **dividend** | A portion of a company's earnings is distributed to shareholders as a return on their investment. | Integer | It must be 1 0r 0 not negative |
+| **fcfps** | Free Cash Flow Per Share (fcfps) - A measure of a company's ability to generate cash after accounting for capital expenditures, calculated by dividing free cash flow by the number of outstanding shares. | Numeric | It must be number |
+| **earnings_growth** | The percentage increase or decrease in a company's earnings over a specific period indicates financial performance and future profitability. | Numeric | It must be a number |
+| **de** | Debt-to-Equity Ratio (DE) - A financial metric that compares a company's total debt to its shareholders' equity, indicating the proportion of debt used to finance its operations relative to equity. | Numeric | It must be a number |
+| **mcap** | Market Capitalization (MCAP) - The total value of a company's outstanding shares, calculated by multiplying the current share price by the total number of shares outstanding. | Integer | It must be positive |
+| **current_ratio** | A liquidity ratio that measures a company's ability to pay its short-term liabilities with its short-term assets, calculated by dividing current assets by current liabilities. | Numeric | It must be a number |
+|  |  |  |  |
+
+### **Data Preparation**
+#### **Load Necessary Libraries and the Dataset**
+Install and Load necessary libraries
+```{r}
+# Install the libraries if they are not installed
+if (!requireNamespace("neuralnet", quietly = TRUE)) {
+  install.packages("neuralnet")
+}
+if (!requireNamespace("pROC", quietly = TRUE)) {
+  install.packages("pROC")
+}
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2")
+}
+
+# Load the libraries
+library(neuralnet) 
+library(pROC) 
+library(ggplot2)
+
+```
+
+Load the dataset and name it dividend.df
+```{r}
+dividend.df <- read.csv("resource/dividend_info.csv")
+```
+Check the dimensions of the data frame
+```{r}
+dim(dividend.df)
+```
+Show the first six rows to check the data
+```{r}
+head(dividend.df)
+```
+
+#### **Exploratory Data Analysis**
+Determine the type (class) of each variable in R
+Print the list of variables
+```{r}
+variable_names <- names(dividend.df)
+```
+Use sapply to get the class of each variable
+```{r}
+variable_classes <- sapply(dividend.df, class)
+```
+Combine variable names and classes into a data frame
+```{r}
+result_df <- data.frame(Variable = variable_names, Class = variable_classes)
+```
+Print the result
+```{r}
+print(result_df)
+```
+Determine the type (class) of each variable in R using the str() function
+```{r}
+str(dividend.df)
+```
+Determine the summary statistics for each column
+```{r}
+summary(dividend.df)
+```
+
+#### **Handle Missing Values**
+Check for missing values in the data
+```{r}
+missing_values <- colSums(is.na(dividend.df))
+```
+Print the columns with missing values and their counts
+```{r}
+print(missing_values[missing_values > 0])
+```
+
+#### **Check and Handle Duplicates**
+Check for duplicate entries in dividend.df
+```{r}
+dupes <- dividend.df[duplicated(dividend.df) | duplicated(dividend.df, fromLast = TRUE), ]
+```
+Print or inspect the duplicate entries
+```{r}
+print(dupes)
+```
+
+#### **Exploration Through Visualization**
+Create side-by-side box plots for 0 dividend and 1 dividend
+```{r, fig.width=12, fig.height=6}
+ggplot(dividend.df, aes(x = as.factor(dividend), 
+                        y = fcfps, 
+                        fill = as.factor(dividend))) +
+  geom_boxplot() +
+  labs(title = "Boxplot of FCFPS for 0 (No) Dividend vs 1 (Yes) Dividend") +
+  theme_test() +
+  scale_fill_manual(values = c("green", "red"))
+```
+
+Create side-by-side boxplots for dividend (x-axis) and earnings_growth (y-axis) with green and red colors
+```{r, fig.width=12, fig.height=6}
+ggplot(dividend.df, aes(x = as.factor(dividend), 
+                        y = earnings_growth, 
+                        fill = as.factor(dividend))) +
+  geom_boxplot() +  # Add boxplots
+  labs(title = "Boxplots of Earnings Growth by Dividend", 
+       x = "Dividend", 
+       y = "earnings_growth") +  # Set plot title and axis labels
+  theme_test() +  # Set plot theme
+  scale_fill_manual(values = c("green", "red"))  # Set boxplot fill colors
+```
+
+Create side-by-side boxplots for dividend (x-axis) and de (y-axis) with green and red colors
+```{r, fig.width=12, fig.height=6}
+ggplot(dividend.df, aes(x = as.factor(dividend), 
+                        y = de, fill = as.factor(dividend))) +
+  geom_boxplot() +  # Add boxplots
+  labs(title = "Boxplots of Debt-to-Equity Ratio by Dividend", 
+       x = "Dividend", y = "de") +  # Set plot title and axis labels
+  theme_test() +  # Set plot theme
+  scale_fill_manual(values = c("green", "red"))  # Set boxplot fill colors
+```
+
+Create side-by-side boxplots for dividend (x-axis) and market capitalization (y-axis) with green and red colors
+```{r, fig.width=12, fig.height=6}
+ggplot(dividend.df, aes(x = as.factor(dividend), 
+                        y = mcap, fill = as.factor(dividend))) +
+  geom_boxplot() +  # Add boxplots
+  labs(title = "Boxplots of Market Capitalization by Dividend", 
+       x = "Dividend", y = "mcap") +  # Set plot title and axis labels
+  theme_test() +  # Set plot theme
+  scale_fill_manual(values = c("green", "red"))  # Set boxplot fill colors
+```
+Remove the outlier
+```{r}
+# Remove rows where mcap is greater than 580 
+dividend.df <- dividend.df[dividend.df$mcap <= 580, ]
+```
+
+Create side-by-side boxplots for dividend (x-axis) and current_ratio (y-axis) with green and red colors
+```{r, fig.width=12, fig.height=6}
+ggplot(dividend.df, aes(x = as.factor(dividend), 
+                        y = current_ratio, 
+                        fill = as.factor(dividend))) +
+  geom_boxplot() +  # Add boxplots
+  labs(title = "Boxplots of Current Ratio by Dividend", 
+       x = "Dividend", y = "current_ratio") +  # Set plot title and axis labels
+  theme_test() +  # Set plot theme
+  scale_fill_manual(values = c("green", "red"))  # Set boxplot fill colors
+```
+
+
+
+
+
+
+
+
+
+
+
+
+### **Modeling**
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+### **Evaluation**
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+### **Conclusion**
