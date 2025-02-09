@@ -1,33 +1,38 @@
 ---
 title: "Neural Network Classification"
-author: "Seif Kungulio"
-date: "2025-02-08"
+author: "by Seif Kungulio"
+#date: "2025-02-08"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+<br><br>
 
 ### **Business Understanding**
 #### **Problem Statement**
 In this analysis, we aim to predict if a stock will pay a dividend.
+<br><br>
 
 ### **Data Understanding**
 #### **Dataset Overview**
 The dataset contains six (6) variables on 200 stocks. Each row represents information on a different stock. The first or last column is typically the outcome variable in data mining. The data indicates if a stock had a dividend (Yes = 1; No = 0). In this case, "dividend" is the response variable in the first column.
 
+<br>
+
 #### **Data Dictionary**
 
-| Variable | Definition                       | Data Type | Constraints/ Rules |
-|:---------|:---------------------------------|:----------|:-------------------|
+| Variable | Definition                                      | Data Type | Constraints/ Rules |
+|:---------|:------------------------------------------------|:----------|:-------------------|
 | **dividend** | A portion of a company's earnings is distributed to shareholders as a return on their investment. | Integer | It must be 1 0r 0 not negative |
 | **fcfps** | Free Cash Flow Per Share (fcfps) - A measure of a company's ability to generate cash after accounting for capital expenditures, calculated by dividing free cash flow by the number of outstanding shares. | Numeric | It must be number |
 | **earnings_growth** | The percentage increase or decrease in a company's earnings over a specific period indicates financial performance and future profitability. | Numeric | It must be a number |
 | **de** | Debt-to-Equity Ratio (DE) - A financial metric that compares a company's total debt to its shareholders' equity, indicating the proportion of debt used to finance its operations relative to equity. | Numeric | It must be a number |
 | **mcap** | Market Capitalization (MCAP) - The total value of a company's outstanding shares, calculated by multiplying the current share price by the total number of shares outstanding. | Integer | It must be positive |
 | **current_ratio** | A liquidity ratio that measures a company's ability to pay its short-term liabilities with its short-term assets, calculated by dividing current assets by current liabilities. | Numeric | It must be a number |
-|  |  |  |  |
+|  |  |  |  | 
+<br>
 
 ### **Data Preparation**
 #### **Load Necessary Libraries and the Dataset**
@@ -65,6 +70,7 @@ Show the first six rows to check the data
 ```{r}
 head(dividend.df)
 ```
+<br>
 
 #### **Exploratory Data Analysis**
 Determine the type (class) of each variable in R
@@ -92,6 +98,7 @@ Determine the summary statistics for each column
 ```{r}
 summary(dividend.df)
 ```
+<br>
 
 #### **Handle Missing Values**
 Check for missing values in the data
@@ -102,6 +109,7 @@ Print the columns with missing values and their counts
 ```{r}
 print(missing_values[missing_values > 0])
 ```
+<br>
 
 #### **Check and Handle Duplicates**
 Check for duplicate entries in dividend.df
@@ -112,6 +120,7 @@ Print or inspect the duplicate entries
 ```{r}
 print(dupes)
 ```
+<br>
 
 #### **Exploration Through Visualization**
 Create side-by-side box plots for 0 dividend and 1 dividend
@@ -182,6 +191,7 @@ ggplot(dividend.df, aes(x = as.factor(dividend),
   theme_test() +  # Set plot theme
   scale_fill_manual(values = c("red", "green"))
 ```
+<br><br>
 
 ### **Modeling**
 #### **Clean and Transform the Dataset**
@@ -222,6 +232,7 @@ Check the distribution of subscriptions rates across training and testing set
 prop.table(table(training.data$dividend)) 
 prop.table(table(testing.data$dividend))
 ```
+<br>
 
 #### **Build the Model**
 Train the neural network model
@@ -235,22 +246,56 @@ nn <- neuralnet(dividend ~ ., data = training.data, hidden = c(2,1),
                 linear.output = FALSE, threshold = 0.01)
 ```
 
+The neural network uses neuralnet function in R. The network comprises the following:
+
+* **nn:** This is the variable name assigned to the neural network model.
+* **neuralnet():** This is the function used to create the neural network model.
+* **dividend ~ .:** This formula notation specifies the model formula. In this case, it means that the variable dividend is the dependent variable, and the **.** represents all other variables in the dataset (training.data) as independent variables.
+* **data = training.data:** This specifies the dataset to use for training the neural network model. In this case, it's training.data.
+* **hidden = c(2,1):** This parameter specifies the architecture of the neural network. It sets the number of hidden layers and the number of neurons in each layer. Here, (2,1) means there are two hidden layers, with one neuron in the first layer and one in the second.
+* **linear.output = FALSE:** This parameter specifies whether the output should be linear. Setting it to FALSE assumes that the relationship between the input and output variables is non-linear.
+* **threshold = 0.01:** This parameter sets the threshold for the error change during training. Training stops when the change in error falls below this threshold.
+
+
 Generate the error of the neural network and the weights between the inputs, hidden layers, and outputs
 ```{r}
 nn$result.matrix
 ```
+
+The output shown above represents the result matrix of the neural network model (nn$result.matrix). Here's what each section of the matrix represents: 
+ 
+* **Error:** The error value of the neural network model. It indicates how well the model fits the training data. Lower error values generally indicate better performance.    
+* **Reached Threshold:** Indicates whether the optimization algorithm reached the specified threshold. In this case, the value suggests whether the error reduction in each iteration was below the defined threshold.    
+* **Steps:** The number of iterations (steps) performed during the training process. This represents how many times the model parameters were updated as part of the training process.    
+* **Intercept to Hidden Layer 1 Weight:** These represent the weights connecting the intercept (bias term) to the neurons in the first hidden layer.    
+* **Input Variables to Hidden Layer 1 Weight:** These represent the weights connecting the input variables (features) to the neurons in the first hidden layer.    
+* **Intercept to Hidden Layer 2 Weights:** These represent the weights connecting the intercept (bias term) to the neurons in the second hidden layer.    
+* **Hidden Layer 1 to Hidden Layer 2 Weights:** These represent the weights connecting the neurons in the first hidden layer to the neurons in the second hidden layer.    
+* **Intercept to Output Layer (Dividend) Weights:** These represent the weights connecting the intercept (bias term) to the output neurons (in this case, predicting dividends).    
+* **Hidden Layer 2 to Output Layer (Dividend) Weights:** These represent the weights connecting the neurons in the second hidden layer to the output neurons (predicting dividends).
+
+<br>
+
+#### **Plot the neural network model**
 
 Plot the neural network
 ```{r}
 plot(nn, rep = "best", mar = c(5, 10, 4, 2) + 0.5)
 ```
 
+* The plot enables us to visually inspect the structure and connections of the neural network model. The line of code **plot(nn, rep="best")** plots the neural network model stored in the variable **nn**. The plot function is used to visualize the neural network architecture, including the connections between nodes (neurons) in different layers. 
+* The **rep** parameter specifies the method used to represent the neural network. In this case, **"best"** is specified, which typically tries to arrange the nodes visually appealingly, optimizing the layout for readability. Here, we used the **rep = "best"** argument to specify the best plot representation, typically based on the number of input and output variables.
+* The **mar** parameter is used to adjust the margins of the plot to ensure that all components are adequately displayed.
+
+<br>
+
+#### **Testing the result**
+
 Test the resulting output using the test data
 ```{r}
 # Subset the testing data to remove the dependent variable 
 temp_test <- subset(testing.data, 
-                    select = c("fcfps", "earnings_growth", 
-                               "de", "mcap", "current_ratio")) 
+                    select = c("fcfps", "earnings_growth", "de", "mcap", "current_ratio")) 
 # Show the temporary (temp) testing data 
 head(temp_test) 
 ```
@@ -270,9 +315,164 @@ Show the comparison of the actual to the predicted values
 ```{r}
 results
 ```
-
+<br><br>
 
 ### **Evaluation**
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+#### **Evaluate model performance**
+Since this is a Neural Network problem, we will focus on accuracy, confusion matrix, recall (sensitivity), precision, F1 score, and receiver operating characteristic (ROC) curve.
+
+* **Accuracy:** Accuracy measures the proportion of correctly classified observations out of the total number of observations. While accuracy provides a general measure of model performance, it may not be suitable for imbalanced datasets where one class dominates the other. 
+* **Confusion Matrix:** A confusion matrix provides a more detailed breakdown of correct and incorrect classifications. It consists of four components: true positives (TP), true negatives (TN), false positives (FP), and false negatives (FN). Various metrics can be derived from the confusion matrix, including sensitivity, specificity, precision, and F1-score. 
+* **Recall (Sensitivity):** Recall measures the proportion of actual positive cases the model correctly identifies. It indicates the model's ability to detect the positive class. Recall is important when the cost of false negatives is high. 
+* **Precision:** Precision measures the proportion of true positive cases among all predicted positive cases. It represents the model's accuracy in predicting positive cases. Precision is instrumental when the cost of false positives is high.  
+* **F1-Score:** The F1-score is the harmonic mean of precision and recall (sensitivity). It provides a balanced measure of the model's performance, especially in the presence of class imbalance. 
+* **Receiver Operating Characteristic (ROC) Curve:** The ROC curve represents the trade-off between sensitivity and specificity across different thresholds. The area under the ROC curve (AUC-ROC) is a commonly used metric that quantifies the model's overall performance, with higher values indicating better discrimination ability.
+
+<br>
+
+#### **Accuracy**
+Calculate accuracy
+```{r}
+# Convert the predicted values to binary classes (0 or 1) based on a threshold 
+predicted_classes <- ifelse(nn.results$net.result > 0.5, 1, 0)
+
+# Compute accuracy
+accuracy <- mean(predicted_classes == testing.data$dividend)
+cat("Accuracy:", accuracy)
+```
+The model achieved an accuracy of 83.87%, meaning it correctly predicted whether a stock would have a dividend 83.87% of the time. This suggests the model performs well in distinguishing between dividend-paying and non-dividend-paying stocks based on the provided features. However, the significance of this accuracy depends on the specific application, as it may be considered good or insufficient depending on the requirements.
+
+<br>
+
+#### **Confusion Matrix**
+Create the confusion matrix
+```{r}
+conf_matrix <- table(testing.data$dividend, predicted_classes)
+```
+Print the confusion matrix
+```{r}
+conf_matrix
+
+# Extract individual values
+TP <- conf_matrix[2, 2]  # True Positives
+TN <- conf_matrix[1, 1]  # True Negatives
+FP <- conf_matrix[1, 2]  # False Positives
+FN <- conf_matrix[2, 1]  # False Negatives
+```
+
+```{r echo=FALSE}
+# Print individual values
+cat("True Positives (TP):", TP)
+cat("True Negatives (TN):", TN)
+cat("False Positives (FP):", FP)
+cat("False Negatives (FN):", FN)
+```
+
+The numbers in the matrix represent the counts of instances falling into the following categories: 
+  
+* **True Positives (TP):** This is the count of stocks correctly predicted to have dividends (actual dividend = 1, predicted dividend = 1). In our case there are 24 true positives. 
+* **False Positives (FP):** This is the count of stocks incorrectly predicted to have dividends (actual dividend = 0, predicted dividend = 1). In our case there are 10 false positives.
+* **True Negatives (TN):** This is the count of stocks correctly predicted not to have dividends (actual dividend = 0, predicted dividend = 0). In our case there are 28 true negatives. 
+* **False Negatives (FN):** This is the count of stocks incorrectly predicted not to have dividends (actual dividend = 1, predicted dividend = 0). In our case there are 0 false negatives.
+
+<br>
+
+#### **Sensitivity (Recall)**
+Calculate recall (sensitivity) 
+
+```{r echo=FALSE}
+# True positives: predicted dividend and actual dividend (same as before)
+true_positives <- sum(predicted_classes == 1 & testing.data$dividend == 1)
+
+# False negatives: actual dividend but not predicted as dividend
+false_negatives <- sum(predicted_classes == 0 & testing.data$dividend == 1)
+
+# Recall = True Positives / (True Positives + False Negatives)
+#recall <- true_positives / (true_positives + false_negatives)
+```
+```{r}
+recall <- TP / (TP + FN)
+```
+
+```{r echo=FALSE}
+# Print recall
+cat("Recall (Sensitivity):", recall)
+```
+
+The model has a sensitivity (recall) of 1.00, meaning it correctly identifies all dividend-paying stocks without missing any. This high sensitivity indicates the model is effective at detecting dividend-paying stocks and has a low rate of false negatives. However, perfect sensitivity may suggest potential overfitting, so it's important to evaluate the model on test data and consider other metrics like precision, accuracy, and the specific context to assess its overall performance.
+
+<br>
+
+#### **Precision**
+Calculate precision
+```{r}
+# True positives: predicted dividend and actual dividend
+true_positives <- sum(predicted_classes == 1 & testing.data$dividend == 1)
+
+# False positives: predicted dividend but not actual dividend 
+false_positives <- sum(predicted_classes == 1 & testing.data$dividend == 0) 
+
+# Precision = True Positives / (True Positives + False Positives) 
+precision <- true_positives / (true_positives + false_positives)
+```
+
+```{r echo=FALSE}
+# Print precision
+cat("Precision:", precision)
+```
+The model's precision is 0.7059, meaning that 70.59% of the instances predicted as dividend-paying stocks are correct. Precision reflects the accuracy of the model's positive predictions, indicating that the model has a moderate ability to identify dividend-paying stocks. A value closer to 1.0 would suggest fewer false positives, while a lower value points to a higher chance of incorrect predictions. While the precision of 0.7059 shows good performance, there is still room for improvement in reducing false positives.
+
+<br>
+
+#### **F1-Score**
+Calculate F1-score
+```{r}
+# F1-score = 2 * (Precision * Recall) / (Precision + Recall) 
+f1_score <- 2 * (precision * recall) / (precision + recall)
+```
+```{r echo=FALSE}
+# Print the F1-Score
+cat("F1-score:", f1_score)
+```
+The model's F1-score is 0.8276, which reflects a good balance between precision and recall. It combines both metrics into a single value, providing a comprehensive measure of the model's performance. The score suggests that the model is effective at both making accurate positive predictions and capturing a high proportion of actual positive instances. While an F1-score closer to 1.0 would indicate even better performance, the current score demonstrates that the model performs well in predicting dividend-paying stocks.
+
+<br>
+
+#### **Receiver Operating Characteristic (ROC) Curve**
+Calculate ROC curve and AUC
+```{r}
+# Extract predicted probabilities for class 1 (dividends) 
+# Convert predicted probabilities to numeric vector 
+predicted_probabilities <- as.numeric(nn.results$net.result)
+```
+
+Compute ROC curve
+```{r}
+roc_curve <- roc(testing.data$dividend, predicted_probabilities)
+```
+
+Plot ROC curve
+```{r}
+plot(roc_curve, main = "ROC Curve", col = "blue")
+abline(a = 0, b = 1, lty = 2, col = "red")  # Diagonal reference line 
+
+# Calculate AUC 
+auc_score <- auc(roc_curve) 
+cat("AUC score:", auc_score) 
+# Add AUC value to plot 
+text(0.5, 0.5, paste("AUC =", round(auc_score, 4)), 
+     adj = c(0.5, 0.5), cex = 1.5, col = "black")
+```
+
+The model's AUC value is 0.9792, indicating excellent performance in distinguishing between dividend-paying and non-dividend-paying stocks. AUC values range from 0 to 1, with 1 representing perfect discrimination and 0.5 indicating random guessing. An AUC of 0.9792 suggests the model has strong discriminatory power, effectively ranking positive instances higher than negative ones, with a very low chance of mis-classification. This score indicates the model is highly effective in predicting whether a stock will have a dividend.
+
+<br>
+
+#### **Model Evaluation Summary**
+The evaluation metrics provide a thorough assessment of the neural network model's performance in predicting dividend outcomes. The model's accuracy of 83.87% shows it correctly predicts dividends most of the time. With a sensitivity of 1.000, it excels at identifying dividend-paying stocks without missing any. Its precision of 0.7059 indicates that most predicted dividend stocks are accurate, but there is room for improvement in reducing false positives. The F1-score of 0.8276 reflects a good balance between precision and recall. The high AUC value of 0.9792 demonstrates excellent discriminatory power, indicating the model effectively differentiates between positive and negative cases. Overall, while the model performs well, further refinement, especially to improve precision, is recommended for better real-world application.
+
+
+
+<br><br>
 
 ### **Conclusion**
