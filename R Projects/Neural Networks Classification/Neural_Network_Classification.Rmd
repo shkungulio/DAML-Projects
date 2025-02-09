@@ -118,46 +118,52 @@ Create side-by-side box plots for 0 dividend and 1 dividend
 ```{r, fig.width=12, fig.height=6}
 ggplot(dividend.df, aes(x = as.factor(dividend), 
                         y = fcfps, 
-                        fill = as.factor(dividend))) +
+                        fill = factor(dividend, labels = c("No", "Yes")))) +
   geom_boxplot() +
-  labs(title = "Boxplot of FCFPS for 0 (No) Dividend vs 1 (Yes) Dividend") +
+  labs(title = "Boxplot of FCFPS by Dividend", x = "Dividend", y = "fcfps",
+       fill = "Dividend?") +
   theme_test() +
-  scale_fill_manual(values = c("green", "red"))
+  scale_fill_manual(values = c("red", "green"))
 ```
 
 Create side-by-side boxplots for dividend (x-axis) and earnings_growth (y-axis) with green and red colors
 ```{r, fig.width=12, fig.height=6}
 ggplot(dividend.df, aes(x = as.factor(dividend), 
                         y = earnings_growth, 
-                        fill = as.factor(dividend))) +
+                        fill = factor(dividend, labels = c("No", "Yes")))) +
   geom_boxplot() +  # Add boxplots
   labs(title = "Boxplots of Earnings Growth by Dividend", 
        x = "Dividend", 
-       y = "earnings_growth") +  # Set plot title and axis labels
+       y = "earnings_growth",
+       fill = "Dividend?") +
   theme_test() +  # Set plot theme
-  scale_fill_manual(values = c("green", "red"))  # Set boxplot fill colors
+  scale_fill_manual(values = c("red", "green"))
 ```
 
 Create side-by-side boxplots for dividend (x-axis) and de (y-axis) with green and red colors
 ```{r, fig.width=12, fig.height=6}
 ggplot(dividend.df, aes(x = as.factor(dividend), 
-                        y = de, fill = as.factor(dividend))) +
+                        y = de, 
+                        fill = factor(dividend, labels = c("No", "Yes")))) +
   geom_boxplot() +  # Add boxplots
   labs(title = "Boxplots of Debt-to-Equity Ratio by Dividend", 
-       x = "Dividend", y = "de") +  # Set plot title and axis labels
+       x = "Dividend", 
+       y = "de", 
+       fill = "Dividend?") +
   theme_test() +  # Set plot theme
-  scale_fill_manual(values = c("green", "red"))  # Set boxplot fill colors
+  scale_fill_manual(values = c("red", "green"))
 ```
 
 Create side-by-side boxplots for dividend (x-axis) and market capitalization (y-axis) with green and red colors
 ```{r, fig.width=12, fig.height=6}
 ggplot(dividend.df, aes(x = as.factor(dividend), 
-                        y = mcap, fill = as.factor(dividend))) +
+                        y = mcap, 
+                        fill = factor(dividend, labels = c("No", "Yes")))) +
   geom_boxplot() +  # Add boxplots
   labs(title = "Boxplots of Market Capitalization by Dividend", 
-       x = "Dividend", y = "mcap") +  # Set plot title and axis labels
+       x = "Dividend", y = "mcap", fill = "Dividend?") +  # Set plot title and axis
   theme_test() +  # Set plot theme
-  scale_fill_manual(values = c("green", "red"))  # Set boxplot fill colors
+  scale_fill_manual(values = c("red", "green"))
 ```
 Remove the outlier
 ```{r}
@@ -169,12 +175,12 @@ Create side-by-side boxplots for dividend (x-axis) and current_ratio (y-axis) wi
 ```{r, fig.width=12, fig.height=6}
 ggplot(dividend.df, aes(x = as.factor(dividend), 
                         y = current_ratio, 
-                        fill = as.factor(dividend))) +
+                        fill = factor(dividend, labels = c("No", "Yes")))) +
   geom_boxplot() +  # Add boxplots
   labs(title = "Boxplots of Current Ratio by Dividend", 
-       x = "Dividend", y = "current_ratio") +  # Set plot title and axis labels
+       x = "Dividend", y = "current_ratio", fill = "Dividend?") +  # Set plot title and axis labels
   theme_test() +  # Set plot theme
-  scale_fill_manual(values = c("green", "red"))  # Set boxplot fill colors
+  scale_fill_manual(values = c("red", "green"))
 ```
 
 ### **Modeling**
@@ -210,6 +216,60 @@ testing.data <- normalized.df[-training.rows, ]
 head(testing.data)
 ```
 
+Check the distribution of subscriptions rates across training and testing set
+```{r}
+# to ensure the subsets are balanced 
+prop.table(table(training.data$dividend)) 
+prop.table(table(testing.data$dividend))
+```
+
+#### **Build the Model**
+Train the neural network model
+```{r}
+# Regress the dependent variable, dividend, against all the independent variables 
+# Set the number of hidden layers to (2,1) 
+# Set linear.output to FALSE (assume the relationship is non-linear) 
+# Set threshold to 0.01 A change in error for an iteration less than 1% will stop 
+# the optimization of the model
+nn <- neuralnet(dividend ~ ., data = training.data, hidden = c(2,1), 
+                linear.output = FALSE, threshold = 0.01)
+```
+
+Generate the error of the neural network and the weights between the inputs, hidden layers, and outputs
+```{r}
+nn$result.matrix
+```
+
+Plot the neural network
+```{r}
+plot(nn, rep = "best", mar = c(5, 10, 4, 2) + 0.5)
+```
+
+Test the resulting output using the test data
+```{r}
+# Subset the testing data to remove the dependent variable 
+temp_test <- subset(testing.data, 
+                    select = c("fcfps", "earnings_growth", 
+                               "de", "mcap", "current_ratio")) 
+# Show the temporary (temp) testing data 
+head(temp_test) 
+```
+
+Use the compute() function to create the prediction variable
+```{r}
+nn.results <- compute(nn, temp_test)
+```
+
+Compare the predicted data to the actual data
+```{r}
+results <- data.frame(actual = testing.data$dividend, 
+                      prediction = nn.results$net.result)
+```
+
+Show the comparison of the actual to the predicted values
+```{r}
+results
+```
 
 
 ### **Evaluation**
