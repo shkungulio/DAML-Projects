@@ -471,6 +471,44 @@ The model's AUC value is 0.9792, indicating excellent performance in distinguish
 #### **Model Evaluation Summary**
 The evaluation metrics provide a thorough assessment of the neural network model's performance in predicting dividend outcomes. The model's accuracy of 83.87% shows it correctly predicts dividends most of the time. With a sensitivity of 1.000, it excels at identifying dividend-paying stocks without missing any. Its precision of 0.7059 indicates that most predicted dividend stocks are accurate, but there is room for improvement in reducing false positives. The F1-score of 0.8276 reflects a good balance between precision and recall. The high AUC value of 0.9792 demonstrates excellent discriminatory power, indicating the model effectively differentiates between positive and negative cases. Overall, while the model performs well, further refinement, especially to improve precision, is recommended for better real-world application.
 
+<br><br>
+
+### **Model Tuning**
+
+Tuning a model with backpropagation is essential for enhancing performance and optimizing predictive accuracy. Backpropagation iteratively adjusts the weights of the network by propagating errors backward, enabling the model to learn from mistakes and improve over time. Key benefits include:
+
+- **Optimizing Weights:** It helps find the best weight combination, minimizing prediction errors and improving accuracy.
+- **Learning Complex Patterns:** Neural networks can capture intricate data patterns, with backpropagation adjusting weights to identify meaningful features.
+- **Reducing Overfitting:** It prevents the model from memorizing data, helping it generalize better to unseen data.
+- **Improving Convergence:** By efficiently updating weights, backpropagation accelerates convergence, saving time and resources.
+- **Adapting to Data Changes:** Periodic tuning allows the model to adapt to evolving data, maintaining its effectiveness.
+
+Overall, backpropagation is crucial for maximizing predictive performance, improving learning, and adapting to changing data.
+
+<br>
+
+#### **Increase the Number of Hidden Layers**
+Increase the number of hidden layers to 4
+```{r}
+nn_tuned <- neuralnet(dividend ~ ., data = training.data, 
+                      hidden = c(4,1), linear.output = FALSE, threshold = 0.01)
+```
+
+Generate the error of the tuned neural network and the weights between the inputs, hidden layers, and outputs
+```{r}
+nn_tuned$result.matrix
+```
+
+<BR>
+
+#### **Plot the Neural Network Model**
+Plot the neural network
+```{r}
+plot(nn_tuned, rep = "best", mar = c(5, 10, 4, 2) + 0.5)
+```
+
+
+
 
 
 <br><br>
