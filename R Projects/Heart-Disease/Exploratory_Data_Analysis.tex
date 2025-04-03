@@ -1,0 +1,802 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Unveiling Heart Disease Trends},
+  pdfauthor={by Seif Kungulio},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Unveiling Heart Disease Trends}
+\author{by Seif Kungulio}
+\date{}
+
+\begin{document}
+\maketitle
+
+\subsection{\texorpdfstring{\textbf{Background and
+Introduction}}{Background and Introduction}}\label{background-and-introduction}
+
+Heart disease is a leading global health concern, accounting for a
+significant number of deaths each year. It encompasses various
+conditions affecting the heart, including coronary artery disease, heart
+attacks, and arrhythmias. Early detection and accurate diagnosis are
+critical in preventing complications and improving patient outcomes.
+
+The UCI Heart Disease Dataset is a widely used dataset in medical data
+analysis, containing patient attributes such as age, cholesterol levels,
+blood pressure, chest pain type, and other key indicators. Analyzing
+this data can help identify patterns and correlations that contribute to
+heart disease.
+
+Data visualization plays a crucial role in understanding complex medical
+datasets. By employing exploratory data analysis (EDA) and visualization
+techniques, we can uncover hidden trends, compare different risk
+factors, and gain insights that support medical decision-making. This
+project aims to utilize various data visualization methods to analyze
+the dataset and provide a clearer understanding of the factors
+influencing heart disease.
+
+By identifying significant risk factors and visualizing their impact,
+this project can contribute to early diagnosis strategies, patient
+awareness, and potential predictive modeling for heart disease
+detection.
+
+\subsection{\texorpdfstring{\textbf{Business
+Understanding}}{Business Understanding}}\label{business-understanding}
+
+\subsubsection{\texorpdfstring{\textbf{Problem
+Statement}}{Problem Statement}}\label{problem-statement}
+
+This project aims to analyze and visualize the dataset to uncover
+trends, correlations, and patterns that distinguish individuals with
+heart disease from those without. By leveraging data visualization
+techniques, we seek to answer the following questions:
+
+\begin{itemize}
+\item
+  What are the most influential factors associated with heart disease?
+\item
+  How do age, cholesterol levels, blood pressure, and other risk factors
+  correlate with heart disease presence?
+\item
+  Can we identify clear patterns in the data that help in early
+  diagnosis?
+\end{itemize}
+
+The findings from this analysis can serve as a foundation for further
+predictive modeling, aiding healthcare professionals in making
+data-driven decisions for heart disease risk assessment.
+
+\subsection{\texorpdfstring{\textbf{Data
+Understanding}}{Data Understanding}}\label{data-understanding}
+
+The dataset contains various features related to patients' health and
+demographic information. We will explore the dataset to understand its
+structure and relationships between variables.
+
+\subsubsection{\texorpdfstring{\textbf{1. Data
+Dictionary}}{1. Data Dictionary}}\label{data-dictionary}
+
+The dataset contains 14 key attributes that are either numerical or
+categorical. These attributes are:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{age:} Age of the patient (numeric)
+\item
+  \textbf{sex:} Gender of the patient (1 = male, 0 = female)
+\item
+  \textbf{cp:} Chest pain type (categorical: 1-4)
+\item
+  \textbf{trestbps:} Resting blood pressure (numeric)
+\item
+  \textbf{chol:} Serum cholesterol (numeric)
+\item
+  \textbf{fbs:} Fasting blood sugar (1 = true, 0 = false)
+\item
+  \textbf{restecg:} Resting electrocardiographic results (categorical)
+\item
+  \textbf{thalach:} Maximum heart rate achieved (numeric)
+\item
+  \textbf{exang:} Exercise-induced angina (1 = yes, 0 = no)
+\item
+  \textbf{oldpeak:} ST depression induced by exercise (numeric)
+\item
+  \textbf{slope:} The slope of the peak exercise ST segment
+  (categorical)
+\item
+  \textbf{ca:} Number of major vessels (0-3, numeric)
+\item
+  \textbf{thal:} Thalassemia (categorical: 1 = normal, 2 = fixed defect,
+  3 = reversible defect)
+\item
+  \textbf{target:} Heart disease (1 = disease, 0 = no disease)
+\end{enumerate}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2344}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1562}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2656}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3438}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Attribute}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Type}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Description}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Contraints/Rules}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{age} & Numerical & The age of the patient in years & Range: 29 -
+77 (Based on the dataset statistics) \\
+\textbf{sex} & Categorical & The gender of the patient & Values: 1 =
+Male, 0 = Female \\
+\textbf{cp} & Categorical & Type of chest pain experienced by the
+patient & Values: 1 = Typical angina, 2 = Atypical angina, 3 =
+Non-anginal pain, 4 = Asymptomatic \\
+\textbf{trestbps} & Numerical & Resting blood pressure of the patient,
+measured in mmHg & Range: Typically, between 94 and 200 mmHg \\
+\textbf{chol} & Numerical & Serum cholesterol level in mg/dl & Range:
+Typically, between 126 and 564 mg/dl \\
+\textbf{fbs} & Categorical & Fasting blood sugar level \textgreater{}
+120 mg/dl & Values: 1 = True, 0 = False \\
+\textbf{restecg} & Categorical & Results of the patient's resting
+electrocardiogram & Values: 0 = Normal, 1 = ST-T wave abnormality, 2 =
+Probable or definite left ventricular hypertrophy \\
+\textbf{thalach} & Numerical & Maximum heart rate achieved during a
+stress test & Range: Typically, between 71 and 202 bpm \\
+\textbf{exang} & Categorical & Whether the patient experiences
+exercise-induced angina & Values: 1 = Yes, 0 = No \\
+\textbf{oldpeak} & Numerical & ST depression induced by exercise
+relative to rest (an ECG measure) & Range: 0.0 to 6.2 (higher values
+indicate more severe abnormalities) \\
+\textbf{slope} & Categorical & Slope of the peak exercise ST segment &
+Values: 1 = Upsloping, 2 = Flat, 3 = Downsloping \\
+\textbf{ca} & Numerical & Number of major vessels colored by fluoroscopy
+& Range: 0-3 \\
+\textbf{thal} & Categorical & Blood disorder variable related to
+thalassemia & Values: 3 = Normal, 6 = Fixed defect, 7 = Reversible
+defect \\
+\textbf{target} & Categorical & Diagnosis of heart disease & Values: 0 =
+No heart disease, 1 = Presence of heart disease \\
+\end{longtable}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{\textbf{2. Data
+Preparation}}{2. Data Preparation}}\label{data-preparation}
+
+\paragraph{\texorpdfstring{\textbf{Data
+Loading}}{Data Loading}}\label{data-loading}
+
+Install necessary packages if they are not already installed.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# For data retrieval from url}
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{requireNamespace}\NormalTok{(}\StringTok{"RCurl"}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{)) \{}
+  \FunctionTok{install.packages}\NormalTok{(}\StringTok{"RCurl"}\NormalTok{)}
+\NormalTok{\}}
+
+\CommentTok{\# For tasks involving data manipulation}
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{requireNamespace}\NormalTok{(}\StringTok{"dplyr"}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{)) \{}
+  \FunctionTok{install.packages}\NormalTok{(}\StringTok{"dplyr"}\NormalTok{)}
+\NormalTok{\}}
+
+\CommentTok{\# For creating visualizations}
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{requireNamespace}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{)) \{}
+  \FunctionTok{install.packages}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{)}
+\NormalTok{\}}
+
+\CommentTok{\# For arranging multiple ggplot2 plots in a single canvas.}
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{requireNamespace}\NormalTok{(}\StringTok{"patchwork"}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{)) \{}
+  \FunctionTok{install.packages}\NormalTok{(}\StringTok{"patchwork"}\NormalTok{)}
+\NormalTok{\}}
+
+\CommentTok{\# for displaying correlation matrices}
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{requireNamespace}\NormalTok{(}\StringTok{"corrplot"}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{)) \{}
+  \FunctionTok{install.packages}\NormalTok{(}\StringTok{"corrplot"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Load the required libraries
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(RCurl)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(patchwork)}
+\FunctionTok{library}\NormalTok{(corrplot)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## corrplot 0.95 loaded
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(GGally)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Registered S3 method overwritten by 'GGally':
+##   method from   
+##   +.gg   ggplot2
+\end{verbatim}
+
+Load the dataset from UCI website using RCurl library
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create url object to retrieve the dataset from UCI Machine Learning Repository}
+\NormalTok{url }\OtherTok{\textless{}{-}} \StringTok{"https://archive.ics.uci.edu/ml/machine{-}learning{-}databases/heart{-}disease/processed.cleveland.data"}
+
+\CommentTok{\# Read the dataset into a dataframe}
+\NormalTok{Heart.df }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\FunctionTok{url}\NormalTok{(url), }\AttributeTok{header =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{na.strings =} \StringTok{"?"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Display dimensions of the dataframe
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{dim}\NormalTok{(Heart.df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 303  14
+\end{verbatim}
+
+View the first six rows of the dataset
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(Heart.df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   V1 V2 V3  V4  V5 V6 V7  V8 V9 V10 V11 V12 V13 V14
+## 1 63  1  1 145 233  1  2 150  0 2.3   3   0   6   0
+## 2 67  1  4 160 286  0  2 108  1 1.5   2   3   3   2
+## 3 67  1  4 120 229  0  2 129  1 2.6   2   2   7   1
+## 4 37  1  3 130 250  0  0 187  0 3.5   3   0   3   0
+## 5 41  0  2 130 204  0  2 172  0 1.4   1   0   3   0
+## 6 56  1  2 120 236  0  0 178  0 0.8   1   0   3   0
+\end{verbatim}
+
+\paragraph{\texorpdfstring{\textbf{Data
+Preprocessing}}{Data Preprocessing}}\label{data-preprocessing}
+
+Renaming the column names for clarity
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{colnames}\NormalTok{(Heart.df) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"age"}\NormalTok{, }\StringTok{"sex"}\NormalTok{, }\StringTok{"cp"}\NormalTok{, }\StringTok{"trestbps"}\NormalTok{, }\StringTok{"chol"}\NormalTok{, }\StringTok{"fbs"}\NormalTok{, }\StringTok{"restecg"}\NormalTok{, }\StringTok{"thalach"}\NormalTok{, }\StringTok{"exang"}\NormalTok{, }\StringTok{"oldpeak"}\NormalTok{, }\StringTok{"slope"}\NormalTok{, }\StringTok{"ca"}\NormalTok{, }\StringTok{"thal"}\NormalTok{, }\StringTok{"target"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Display the structure of the dataframe
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{str}\NormalTok{(Heart.df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    303 obs. of  14 variables:
+##  $ age     : num  63 67 67 37 41 56 62 57 63 53 ...
+##  $ sex     : num  1 1 1 1 0 1 0 0 1 1 ...
+##  $ cp      : num  1 4 4 3 2 2 4 4 4 4 ...
+##  $ trestbps: num  145 160 120 130 130 120 140 120 130 140 ...
+##  $ chol    : num  233 286 229 250 204 236 268 354 254 203 ...
+##  $ fbs     : num  1 0 0 0 0 0 0 0 0 1 ...
+##  $ restecg : num  2 2 2 0 2 0 2 0 2 2 ...
+##  $ thalach : num  150 108 129 187 172 178 160 163 147 155 ...
+##  $ exang   : num  0 1 1 0 0 0 0 1 0 1 ...
+##  $ oldpeak : num  2.3 1.5 2.6 3.5 1.4 0.8 3.6 0.6 1.4 3.1 ...
+##  $ slope   : num  3 2 2 3 1 1 3 1 2 3 ...
+##  $ ca      : num  0 3 2 0 0 0 2 0 1 0 ...
+##  $ thal    : num  6 3 7 3 3 3 3 3 7 7 ...
+##  $ target  : int  0 2 1 0 0 0 3 0 2 1 ...
+\end{verbatim}
+
+Display the statistical summary of the dataframe
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(Heart.df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       age             sex               cp           trestbps    
+##  Min.   :29.00   Min.   :0.0000   Min.   :1.000   Min.   : 94.0  
+##  1st Qu.:48.00   1st Qu.:0.0000   1st Qu.:3.000   1st Qu.:120.0  
+##  Median :56.00   Median :1.0000   Median :3.000   Median :130.0  
+##  Mean   :54.44   Mean   :0.6799   Mean   :3.158   Mean   :131.7  
+##  3rd Qu.:61.00   3rd Qu.:1.0000   3rd Qu.:4.000   3rd Qu.:140.0  
+##  Max.   :77.00   Max.   :1.0000   Max.   :4.000   Max.   :200.0  
+##                                                                  
+##       chol            fbs            restecg          thalach     
+##  Min.   :126.0   Min.   :0.0000   Min.   :0.0000   Min.   : 71.0  
+##  1st Qu.:211.0   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:133.5  
+##  Median :241.0   Median :0.0000   Median :1.0000   Median :153.0  
+##  Mean   :246.7   Mean   :0.1485   Mean   :0.9901   Mean   :149.6  
+##  3rd Qu.:275.0   3rd Qu.:0.0000   3rd Qu.:2.0000   3rd Qu.:166.0  
+##  Max.   :564.0   Max.   :1.0000   Max.   :2.0000   Max.   :202.0  
+##                                                                   
+##      exang           oldpeak         slope             ca        
+##  Min.   :0.0000   Min.   :0.00   Min.   :1.000   Min.   :0.0000  
+##  1st Qu.:0.0000   1st Qu.:0.00   1st Qu.:1.000   1st Qu.:0.0000  
+##  Median :0.0000   Median :0.80   Median :2.000   Median :0.0000  
+##  Mean   :0.3267   Mean   :1.04   Mean   :1.601   Mean   :0.6722  
+##  3rd Qu.:1.0000   3rd Qu.:1.60   3rd Qu.:2.000   3rd Qu.:1.0000  
+##  Max.   :1.0000   Max.   :6.20   Max.   :3.000   Max.   :3.0000  
+##                                                  NA's   :4       
+##       thal           target      
+##  Min.   :3.000   Min.   :0.0000  
+##  1st Qu.:3.000   1st Qu.:0.0000  
+##  Median :3.000   Median :0.0000  
+##  Mean   :4.734   Mean   :0.9373  
+##  3rd Qu.:7.000   3rd Qu.:2.0000  
+##  Max.   :7.000   Max.   :4.0000  
+##  NA's   :2
+\end{verbatim}
+
+According to the Data Dictionary, the following attributes should be
+have binary variables, \texttt{sex}, \texttt{fbs}, \texttt{exang}, and
+\texttt{target}. But, some shows to have values besides 0's and 1's.\\
+Let's convert binary variables to (0, 1)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Heart.df}\SpecialCharTok{$}\NormalTok{sex }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(Heart.df}\SpecialCharTok{$}\NormalTok{sex }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{Heart.df}\SpecialCharTok{$}\NormalTok{fbs }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(Heart.df}\SpecialCharTok{$}\NormalTok{fbs }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{Heart.df}\SpecialCharTok{$}\NormalTok{exang }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(Heart.df}\SpecialCharTok{$}\NormalTok{exang }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{Heart.df}\SpecialCharTok{$}\NormalTok{target }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(Heart.df}\SpecialCharTok{$}\NormalTok{target }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Check to see if there are missing values in the dataframe
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sapply}\NormalTok{(Heart.df, }\ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{sum}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(x)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      age      sex       cp trestbps     chol      fbs  restecg  thalach 
+##        0        0        0        0        0        0        0        0 
+##    exang  oldpeak    slope       ca     thal   target 
+##        0        0        0        4        2        0
+\end{verbatim}
+
+From the summary and the table above, there are some missing values in
+\texttt{ca} and \texttt{thal} columns.\\
+Let's handle the missing values using mean/mode imputation method
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# If missing values exist in \textquotesingle{}ca\textquotesingle{} or \textquotesingle{}thal\textquotesingle{}, handle them using mean/mode imputation}
+\NormalTok{Heart.df}\SpecialCharTok{$}\NormalTok{ca[}\FunctionTok{is.na}\NormalTok{(Heart.df}\SpecialCharTok{$}\NormalTok{ca)] }\OtherTok{\textless{}{-}} \FunctionTok{median}\NormalTok{(Heart.df}\SpecialCharTok{$}\NormalTok{ca, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{Heart.df}\SpecialCharTok{$}\NormalTok{ca[Heart.df}\SpecialCharTok{$}\NormalTok{ca }\SpecialCharTok{==} \StringTok{"?"}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{median}\NormalTok{(Heart.df}\SpecialCharTok{$}\NormalTok{ca, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{Heart.df}\SpecialCharTok{$}\NormalTok{thal[}\FunctionTok{is.na}\NormalTok{(Heart.df}\SpecialCharTok{$}\NormalTok{thal)] }\OtherTok{\textless{}{-}} \FunctionTok{median}\NormalTok{(Heart.df}\SpecialCharTok{$}\NormalTok{thal, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{Heart.df}\SpecialCharTok{$}\NormalTok{thal[Heart.df}\SpecialCharTok{$}\NormalTok{thal }\SpecialCharTok{==} \StringTok{"?"}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{median}\NormalTok{(Heart.df}\SpecialCharTok{$}\NormalTok{ca, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Check for duplicate entries in the dataframe and print them out
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dupes }\OtherTok{\textless{}{-}}\NormalTok{ Heart.df[}\FunctionTok{duplicated}\NormalTok{(Heart.df) }\SpecialCharTok{|} \FunctionTok{duplicated}\NormalTok{(Heart.df, }\AttributeTok{fromLast =} \ConstantTok{TRUE}\NormalTok{), ]}
+\CommentTok{\# Print or inspect the duplicate entries}
+\FunctionTok{print}\NormalTok{(dupes)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] age      sex      cp       trestbps chol     fbs      restecg  thalach 
+##  [9] exang    oldpeak  slope    ca       thal     target  
+## <0 rows> (or 0-length row.names)
+\end{verbatim}
+
+Convert categorical attributes to factors
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Define a list of categorical columns with their levels and labels}
+\NormalTok{categorical\_columns }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
+  \AttributeTok{sex =} \FunctionTok{list}\NormalTok{(}\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Female"}\NormalTok{, }\StringTok{"Male"}\NormalTok{)),}
+  \AttributeTok{cp =} \FunctionTok{list}\NormalTok{(}\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{), }\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Typical Angina"}\NormalTok{, }\StringTok{"Atypical Angina"}\NormalTok{, }\StringTok{"Non{-}Angina"}\NormalTok{, }\StringTok{"Asymptomatic"}\NormalTok{)),}
+  \AttributeTok{fbs =} \FunctionTok{list}\NormalTok{(}\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"False"}\NormalTok{, }\StringTok{"True"}\NormalTok{)),}
+  \AttributeTok{restecg =} \FunctionTok{list}\NormalTok{(}\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{), }\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Normal"}\NormalTok{, }\StringTok{"Wave{-}abnormality"}\NormalTok{, }\StringTok{"Probable"}\NormalTok{)),}
+  \AttributeTok{exang =} \FunctionTok{list}\NormalTok{(}\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"No"}\NormalTok{, }\StringTok{"Yes"}\NormalTok{)),}
+  \AttributeTok{slope =} \FunctionTok{list}\NormalTok{(}\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{), }\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Upsloping"}\NormalTok{, }\StringTok{"Flat"}\NormalTok{, }\StringTok{"Downsloping"}\NormalTok{)),}
+  \AttributeTok{thal =} \FunctionTok{list}\NormalTok{(}\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{7}\NormalTok{), }\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Normal"}\NormalTok{, }\StringTok{"Fixed Defect"}\NormalTok{, }\StringTok{"Reversible"}\NormalTok{)),}
+  \AttributeTok{target =} \FunctionTok{list}\NormalTok{(}\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"No"}\NormalTok{, }\StringTok{"Yes"}\NormalTok{))}
+\NormalTok{)}
+
+\CommentTok{\# Apply the factor transformation using a loop}
+\ControlFlowTok{for}\NormalTok{ (col }\ControlFlowTok{in} \FunctionTok{names}\NormalTok{(categorical\_columns)) \{}
+\NormalTok{  Heart.df[[col]] }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(Heart.df[[col]], }
+                            \AttributeTok{levels =}\NormalTok{ categorical\_columns[[col]]}\SpecialCharTok{$}\NormalTok{levels, }
+                            \AttributeTok{labels =}\NormalTok{ categorical\_columns[[col]]}\SpecialCharTok{$}\NormalTok{labels)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{\textbf{3. Exploratory Through
+Visualization}}{3. Exploratory Through Visualization}}\label{exploratory-through-visualization}
+
+\paragraph{\texorpdfstring{\textbf{Barplots}}{Barplots}}\label{barplots}
+
+Create a function to plot barplots distribution of the categorical
+variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{HeartDiseaseBar }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(var) \{}
+  \FunctionTok{ggplot}\NormalTok{(Heart.df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ .data[[var]], }\AttributeTok{fill =}\NormalTok{ target)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{position =} \StringTok{"dodge"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme\_test}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"No"} \OtherTok{=} \StringTok{"\#006000"}\NormalTok{, }\StringTok{"Yes"} \OtherTok{=} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Distribution of Heart Disease by"}\NormalTok{, var),}
+         \AttributeTok{x =}\NormalTok{ var, }\AttributeTok{fill =} \StringTok{"Heart Disease"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Create the distribution of heart disease by categorical variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create the plots}
+\NormalTok{g1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(Heart.df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{target, }\AttributeTok{fill=}\NormalTok{target))}\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{theme\_test}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"No"} \OtherTok{=} \StringTok{"\#006000"}\NormalTok{, }\StringTok{"Yes"} \OtherTok{=} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Distribution of Heart Disease"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Heart Disease"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Heart Disease"}\NormalTok{)}
+\NormalTok{g2 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseBar}\NormalTok{(}\StringTok{"sex"}\NormalTok{)}
+\NormalTok{g3 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseBar}\NormalTok{(}\StringTok{"cp"}\NormalTok{)}
+\NormalTok{g4 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseBar}\NormalTok{(}\StringTok{"fbs"}\NormalTok{)}
+\NormalTok{g5 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseBar}\NormalTok{(}\StringTok{"restecg"}\NormalTok{)}
+\NormalTok{g6 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseBar}\NormalTok{(}\StringTok{"exang"}\NormalTok{)}
+\NormalTok{g7 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseBar}\NormalTok{(}\StringTok{"slope"}\NormalTok{)}
+\NormalTok{g8 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseBar}\NormalTok{(}\StringTok{"thal"}\NormalTok{)}
+
+\CommentTok{\# Combine plot using patchwork}
+\NormalTok{(g1 }\SpecialCharTok{|}\NormalTok{ g2) }\SpecialCharTok{/}
+\NormalTok{(g3 }\SpecialCharTok{|}\NormalTok{ g4) }\SpecialCharTok{/}
+\NormalTok{(g5 }\SpecialCharTok{|}\NormalTok{ g6) }\SpecialCharTok{/}
+\NormalTok{(g7 }\SpecialCharTok{|}\NormalTok{ g8)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Exploratory_Data_Analysis_files/figure-latex/unnamed-chunk-14-1.pdf}
+
+\subparagraph{\texorpdfstring{\textbf{Bar Plots Interpretation and
+Analysis}}{Bar Plots Interpretation and Analysis}}\label{bar-plots-interpretation-and-analysis}
+
+\paragraph{\texorpdfstring{\textbf{Histogram
+Distributions}}{Histogram Distributions}}\label{histogram-distributions}
+
+Create a function to plot histogram distribution of the numerical
+variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{HeartDiseaseHist }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(var1) \{}
+  \FunctionTok{ggplot}\NormalTok{(Heart.df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ .data[[var1]], }\AttributeTok{fill =}\NormalTok{ target)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{bins =} \DecValTok{15}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme\_test}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"No"} \OtherTok{=} \StringTok{"\#006000"}\NormalTok{, }\StringTok{"Yes"} \OtherTok{=} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Distribution of"}\NormalTok{, var1),}
+         \AttributeTok{x =}\NormalTok{ var1, }\AttributeTok{fill =} \StringTok{"Heart Disease"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Create histogram distributions of continuous variables.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create the plots}
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseHist}\NormalTok{(}\StringTok{"age"}\NormalTok{)}
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseHist}\NormalTok{(}\StringTok{"trestbps"}\NormalTok{)}
+\NormalTok{p3 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseHist}\NormalTok{(}\StringTok{"chol"}\NormalTok{)}
+\NormalTok{p4 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseHist}\NormalTok{(}\StringTok{"thalach"}\NormalTok{)}
+\NormalTok{p5 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseHist}\NormalTok{(}\StringTok{"oldpeak"}\NormalTok{)}
+
+\CommentTok{\# Combine plot using patchwork}
+\NormalTok{(p1) }\SpecialCharTok{/}
+\NormalTok{(p2 }\SpecialCharTok{|}\NormalTok{ p3) }\SpecialCharTok{/}
+\NormalTok{(p4 }\SpecialCharTok{|}\NormalTok{ p5)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Exploratory_Data_Analysis_files/figure-latex/unnamed-chunk-16-1.pdf}
+
+\subparagraph{\texorpdfstring{\textbf{Histogram Plots Interpretation and
+Analysis}}{Histogram Plots Interpretation and Analysis}}\label{histogram-plots-interpretation-and-analysis}
+
+\paragraph{\texorpdfstring{\textbf{Boxplots}}{Boxplots}}\label{boxplots}
+
+Create a function to plot side-by-side boxplots
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{HeartDiseaseBoxplot }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(var1, var2) \{}
+  \FunctionTok{ggplot}\NormalTok{(Heart.df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ .data[[var1]],}
+                       \AttributeTok{y =}\NormalTok{ .data[[var2]],}
+                       \AttributeTok{fill =}\NormalTok{ .data[[var1]])) }\SpecialCharTok{+}
+    \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{theme\_test}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"No"} \OtherTok{=} \StringTok{"\#006000"}\NormalTok{, }\StringTok{"Yes"} \OtherTok{=} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Boxplot of"}\NormalTok{, var2, }\StringTok{"by"}\NormalTok{, var1),}
+         \AttributeTok{x =}\NormalTok{ var1, }\AttributeTok{y =}\NormalTok{ var2, }\AttributeTok{fill =} \StringTok{"Heart Disease"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Create boxplots of continuous variables.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create the plots}
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseBoxplot}\NormalTok{(}\StringTok{"target"}\NormalTok{, }\StringTok{"age"}\NormalTok{)}
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseBoxplot}\NormalTok{(}\StringTok{"target"}\NormalTok{, }\StringTok{"trestbps"}\NormalTok{)}
+\NormalTok{p3 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseBoxplot}\NormalTok{(}\StringTok{"target"}\NormalTok{, }\StringTok{"chol"}\NormalTok{)}
+\NormalTok{p4 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseBoxplot}\NormalTok{(}\StringTok{"target"}\NormalTok{, }\StringTok{"thalach"}\NormalTok{)}
+\NormalTok{p5 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseBoxplot}\NormalTok{(}\StringTok{"target"}\NormalTok{, }\StringTok{"oldpeak"}\NormalTok{)}
+
+\CommentTok{\# Combine plot using patchwork}
+\NormalTok{(p1 }\SpecialCharTok{|}\NormalTok{ p2) }\SpecialCharTok{/}
+\NormalTok{(p3 }\SpecialCharTok{|}\NormalTok{ p4) }\SpecialCharTok{/}
+\NormalTok{(p5)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Exploratory_Data_Analysis_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+\subparagraph{\texorpdfstring{\textbf{Box Plots Interpretation and
+Analysis}}{Box Plots Interpretation and Analysis}}\label{box-plots-interpretation-and-analysis}
+
+\paragraph{\texorpdfstring{\textbf{Scaterplots}}{Scaterplots}}\label{scaterplots}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{HeartDiseaseScatter }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(point1, point2)\{}
+  \FunctionTok{ggplot}\NormalTok{(Heart.df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ .data[[point1]],}
+                       \AttributeTok{y =}\NormalTok{ .data[[point2]],}
+                       \AttributeTok{color =}\NormalTok{ target)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{theme\_test}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{color =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Scatterplot of"}\NormalTok{, point1, }\StringTok{"by"}\NormalTok{, point2),}
+       \AttributeTok{x =}\NormalTok{ point1, }\AttributeTok{y =}\NormalTok{ point2, }\AttributeTok{color =} \StringTok{"Heart Disease"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create the plots}
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseScatter}\NormalTok{(}\StringTok{"age"}\NormalTok{, }\StringTok{"oldpeak"}\NormalTok{)}
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseScatter}\NormalTok{(}\StringTok{"age"}\NormalTok{, }\StringTok{"chol"}\NormalTok{)}
+\NormalTok{p3 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseScatter}\NormalTok{(}\StringTok{"age"}\NormalTok{, }\StringTok{"trestbps"}\NormalTok{)}
+\NormalTok{p4 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseScatter}\NormalTok{(}\StringTok{"age"}\NormalTok{, }\StringTok{"thalach"}\NormalTok{)}
+\NormalTok{p5 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseScatter}\NormalTok{(}\StringTok{"chol"}\NormalTok{, }\StringTok{"thalach"}\NormalTok{)}
+\NormalTok{p6 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseScatter}\NormalTok{(}\StringTok{"trestbps"}\NormalTok{, }\StringTok{"chol"}\NormalTok{)}
+\NormalTok{p7 }\OtherTok{\textless{}{-}} \FunctionTok{HeartDiseaseScatter}\NormalTok{(}\StringTok{"thalach"}\NormalTok{, }\StringTok{"oldpeak"}\NormalTok{)}
+
+\CommentTok{\# Combine plot using patchwork}
+\NormalTok{(p1 }\SpecialCharTok{|}\NormalTok{ p2) }\SpecialCharTok{/}
+\NormalTok{(p3 }\SpecialCharTok{|}\NormalTok{ p4) }\SpecialCharTok{/}
+\NormalTok{(p5 }\SpecialCharTok{|}\NormalTok{ p6) }\SpecialCharTok{/}
+\NormalTok{(p7)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Exploratory_Data_Analysis_files/figure-latex/scatterplot-1.pdf}
+
+\subparagraph{\texorpdfstring{\textbf{Scatter Plots Interpretation and
+Analysis}}{Scatter Plots Interpretation and Analysis}}\label{scatter-plots-interpretation-and-analysis}
+
+\paragraph{\texorpdfstring{\textbf{Pair
+Plots}}{Pair Plots}}\label{pair-plots}
+
+Pairwise relationship between multiple continuous variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create a colored pair plot for selected variables}
+\FunctionTok{ggpairs}\NormalTok{(Heart.df[, }\FunctionTok{c}\NormalTok{(}\StringTok{"age"}\NormalTok{, }\StringTok{"trestbps"}\NormalTok{, }\StringTok{"chol"}\NormalTok{, }
+                     \StringTok{"thalach"}\NormalTok{, }\StringTok{"oldpeak"}\NormalTok{, }\StringTok{"target"}\NormalTok{)], }
+        \FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ target, }\AttributeTok{fill =}\NormalTok{ target))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+\end{verbatim}
+
+\includegraphics{Exploratory_Data_Analysis_files/figure-latex/unnamed-chunk-20-1.pdf}
+
+\subparagraph{\texorpdfstring{\textbf{Pair Plots Interpretation and
+Analysis}}{Pair Plots Interpretation and Analysis}}\label{pair-plots-interpretation-and-analysis}
+
+\paragraph{\texorpdfstring{\textbf{Correlation
+Matrix}}{Correlation Matrix}}\label{correlation-matrix}
+
+Correlation matrix for continuous variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Selecting only continuous variables}
+\NormalTok{continuous\_vars }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"age"}\NormalTok{, }\StringTok{"trestbps"}\NormalTok{, }\StringTok{"chol"}\NormalTok{, }\StringTok{"thalach"}\NormalTok{, }\StringTok{"oldpeak"}\NormalTok{)}
+\NormalTok{continuous\_data }\OtherTok{\textless{}{-}}\NormalTok{ Heart.df }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(continuous\_vars))}
+
+\CommentTok{\# Calculating correlation matrix}
+\NormalTok{correlation\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{cor}\NormalTok{(continuous\_data)}
+
+\CommentTok{\# Plotting the correlation matrix}
+\FunctionTok{corrplot}\NormalTok{(correlation\_matrix, }\AttributeTok{method =} \StringTok{"circle"}\NormalTok{,}
+         \AttributeTok{type =} \StringTok{"lower"}\NormalTok{, }\AttributeTok{tl.col =} \StringTok{"black"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Exploratory_Data_Analysis_files/figure-latex/unnamed-chunk-21-1.pdf}
+
+\subsection{\texorpdfstring{\textbf{Conclusion}}{Conclusion}}\label{conclusion}
+
+\end{document}
