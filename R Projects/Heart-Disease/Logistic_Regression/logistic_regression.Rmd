@@ -1,0 +1,63 @@
+---
+title: "Analyzing Heart Disease: Logistic Regression"
+author: "by Seif Kungulio"
+date: "2025-04-04"
+output:
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_title: "Table of Contents"
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<hr style="height:5px; border:none; color:red; background-color:red;" />
+
+<br>
+
+## **Table of Contents:**
+
+## **Background & Introduction**
+
+
+
+
+## **Business Understanding**
+
+
+
+
+## **Data Understanding**
+
+
+
+
+## **Data Preparation**
+
+
+
+
+## **Modeling**
+
+
+
+
+## **Evaluation**
+
+
+
+
+## **Deployment**
+
+
+
+
+## **Conclusion**
+
+
+

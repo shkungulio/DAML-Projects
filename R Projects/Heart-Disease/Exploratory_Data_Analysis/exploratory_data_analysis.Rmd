@@ -1,6 +1,7 @@
 ---
-title: "Unveiling Heart Disease Trends"
+title: 'Analyzing Heart Disease: EDA'
 author: "by Seif Kungulio"
+date: "2025-04-04"
 output:
   html_document:
     theme: cosmo
@@ -14,13 +15,12 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-<hr style="height:5px; border:none; color:red; background-color:red;" />
-
-<br>
+<hr style="height:5px; border:none; color:red; background-color:red;" /><br>
 
 
-## **Background and Introduction**
+## **Background & Introduction**
+<hr style="height:2px; border:none; color:green; background-color:green;" />
+
 Heart disease is a leading global health concern, accounting for a significant number of deaths each year. It encompasses various conditions affecting the heart, including coronary artery disease, heart attacks, and arrhythmias. Early detection and accurate diagnosis are critical in preventing complications and improving patient outcomes.
 
 The UCI Heart Disease Dataset is a widely used dataset in medical data analysis, containing patient attributes such as age, cholesterol levels, blood pressure, chest pain type, and other key indicators. Analyzing this data can help identify patterns and correlations that contribute to heart disease.
@@ -28,11 +28,12 @@ The UCI Heart Disease Dataset is a widely used dataset in medical data analysis,
 Data visualization plays a crucial role in understanding complex medical datasets. By employing exploratory data analysis (EDA) and visualization techniques, we can uncover hidden trends, compare different risk factors, and gain insights that support medical decision-making. This project aims to utilize various data visualization methods to analyze the dataset and provide a clearer understanding of the factors influencing heart disease.
 
 By identifying significant risk factors and visualizing their impact, this project can contribute to early diagnosis strategies, patient awareness, and potential predictive modeling for heart disease detection.  
-
-<hr style="height:1px; border:none; color:#333; background-color:#333;" />
 <br>
 
+
 ## **Business Understanding**
+<hr style="height:2px; border:none; color:green; background-color:green;" />
+
 ### **Problem Statement**
 This project aims to analyze and visualize the dataset to uncover trends, correlations, and patterns that distinguish individuals with heart disease from those without. By leveraging data visualization techniques, we seek to answer the following questions:
 
@@ -42,15 +43,16 @@ This project aims to analyze and visualize the dataset to uncover trends, correl
 
   + Can we identify clear patterns in the data that help in early diagnosis?
 
-The findings from this analysis can serve as a foundation for further predictive modeling, aiding healthcare professionals in making data-driven decisions for heart disease risk assessment.
-
-<hr style="height:1px; border:none; color:#333; background-color:#333;" />
+The findings from this analysis can serve as a foundation for further predictive modeling, aiding healthcare professionals in making data-driven decisions for heart disease risk assessment.  
 <br>
 
+
 ## **Data Understanding**
+<hr style="height:2px; border:none; color:green; background-color:green;" />
+
 The dataset contains various features related to patients' health and demographic information. We will explore the dataset to understand its structure and relationships between variables.
 
-### **1. Data Dictionary**
+### **Data Dictionary**
 The dataset contains 14 key attributes that are either numerical or categorical. These attributes are:
 
   1. **age:** Age of the patient (numeric)
@@ -86,12 +88,14 @@ The dataset contains 14 key attributes that are either numerical or categorical.
 | **ca** | Numerical | Number of major vessels colored by fluoroscopy | Range: 0-3 |
 | **thal** | Categorical | Blood disorder variable related to thalassemia | Values: 3 = Normal, 6 = Fixed defect, 7 = Reversible defect |
 | **target** | Categorical | Diagnosis of heart disease | Values: 0 = No heart disease, 1 = Presence of heart disease |
----
+|   |   |   |   |
+<br>
 
 
-### **2. Data Preparation**
+## **Data Preparation**
+<hr style="height:2px; border:none; color:green; background-color:green;" />
 
-#### **Data Loading**
+### **Data Loading**
 Install necessary packages if they are not already installed.
 ```{r}
 # For data retrieval from url
@@ -150,7 +154,7 @@ head(Heart.df)
 ```
 <br>
 
-#### **Data Preprocessing**
+### **Data Preprocessing**
 
 Renaming the column names for clarity
 ```{r}
@@ -219,10 +223,9 @@ for (col in names(categorical_columns)) {
                             labels = categorical_columns[[col]]$labels)
 }
 ```
----
 
 
-### **3. Exploration Through Visualization**
+### **EDA through Visualization**
 
 #### **a. Barplots**
 
@@ -391,10 +394,11 @@ corrplot(correlation_matrix, method = "circle",
          type = "lower", tl.col = "black")
 ```
 
-<hr style="height:1px; border:none; color:#333; background-color:#333;" />
 <br>
 
+
 ## **Conclusion**
+<hr style="height:2px; border:none; color:green; background-color:green;" />
 
 
 
