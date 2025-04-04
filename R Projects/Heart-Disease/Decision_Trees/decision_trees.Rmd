@@ -1,7 +1,8 @@
 ---
-title: "Analyzing Heart Disease: Logistic Regression"
+title: "Predicting Heart Disease Risks"
+subtitle: "Using Decision Tree Algorithm"
 author: "by Seif Kungulio"
-date: "2025-04-04"
+#date: "2025-04-04"
 output:
   html_document:
     theme: cosmo
@@ -21,13 +22,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ## **Background & Introduction**
 <hr style="height:2px; border:none; color:green; background-color:green;" />
 
-Cardiovascular disease remains the leading cause of mortality worldwide, placing a significant burden on individuals, healthcare systems, and economies. Early identification of individuals at high risk for heart disease is essential for timely intervention and effective clinical decision-making. As the demand for data-driven healthcare continues to grow, predictive modeling plays an increasingly important role in supporting diagnosis and treatment pathways.
+Cardiovascular diseases remain the leading cause of mortality worldwide, accounting for an estimated 17.9 million deaths each year. In clinical practice, early diagnosis and effective risk stratification are crucial for preventing adverse outcomes associated with heart disease. With the increasing digitization of healthcare records, large datasets have become more accessible for analysis using machine learning techniques. This has opened the door for data-driven approaches to assist clinicians in making timely and accurate decisions.
 
-The UCI Heart Disease dataset is a widely recognized collection of patient data aimed at predicting the presence or absence of heart disease based on various clinical and demographic variables. The dataset contains multiple features such as age, sex, blood pressure, cholesterol levels, maximum heart rate, and other indicators collected from medical examinations.
+One such dataset is the **Heart Disease dataset** from the **UCI Machine Learning Repository**, which includes a combination of demographic, clinical, and laboratory features collected from patients. These features—such as age, chest pain type, resting blood pressure, cholesterol levels, and ECG results—can provide meaningful insights into the likelihood of heart disease in individuals.
 
-This project explores the use of **logistic regression** to develop a predictive model for heart disease classification. Logistic regression is particularly suitable for binary classification problems, such as distinguishing between the presence or absence of a medical condition. The goal is to derive insights from the model that could potentially support clinicians in identifying at-risk individuals with greater confidence and accuracy.
-
-As a healthcare professional working in a cardiovascular unit, I have firsthand experience witnessing the impact of heart disease on patient outcomes. Integrating statistical modeling into clinical workflows holds promise for improving patient care, and this project aims to bridge practical healthcare knowledge with analytical techniques.    
+In this study, we explore the application of **Decision Tree modeling** to the UCI Heart Disease dataset. Decision Trees are widely used in healthcare data mining due to their interpretability, ease of implementation, and ability to handle both categorical and continuous data. By analyzing the dataset using this method, we aim to construct an interpretable model that can help identify key predictors of heart disease and assist clinicians in diagnostic decision-making.  
 <br>
 
 
@@ -35,20 +34,13 @@ As a healthcare professional working in a cardiovascular unit, I have firsthand 
 <hr style="height:2px; border:none; color:green; background-color:green;" />
 
 ### **Problem Statement**
-Heart disease diagnosis often requires a combination of clinical judgment and diagnostic tests, which may not always be readily accessible or conclusive. Therefore, the ability to predict the likelihood of heart disease using easily obtainable patient data can assist healthcare professionals in prioritizing care and initiating early interventions.
+The primary objective of this study is to develop a Decision Tree model capable of predicting the presence of heart disease in patients using the UCI Heart Disease dataset. Specifically, we seek to:
 
-This project seeks to answer the following question:
+1. Identify the most significant clinical and demographic factors contributing to heart disease prediction.
+2. Construct a Decision Tree classifier that can effectively distinguish between patients with and without heart disease.
+3. Evaluate the model’s accuracy, interpretability, and potential clinical utility.
 
-> **Can we build a logistic regression model that accurately predicts the presence of heart disease based on clinical and demographic attributes in the UCI dataset?**
-
-To address this, we will:
-- Clean and preprocess the dataset.
-- Explore variable relationships through statistical summaries and visualizations.
-- Train a logistic regression model using key predictors.
-- Evaluate the model's performance using accuracy, sensitivity, specificity, and AUC-ROC metrics.
-- Interpret the significance of predictors to inform potential clinical relevance.
-
-By leveraging logistic regression, this study aims to provide a simple yet interpretable model that can support healthcare providers in risk stratification and decision-making processes.  
+The motivation for this work stems from the need for transparent, rule-based models in clinical environments, where model decisions must be understandable to healthcare providers. Through this analysis, we aim to contribute toward the integration of machine learning techniques in cardiovascular risk assessment and diagnostic support.  
 <br>
 
 
@@ -101,42 +93,56 @@ The dataset contains 14 key attributes that are either numerical or categorical.
 <hr style="height:2px; border:none; color:green; background-color:green;" />
 
 ### **Data Loading**
-Install necessary packages if they are not already installed.
-```{r}
-# For data retrieval from url
+Install and load the following packages if they are not already installed.
+
+- **RCurl**: for data retrieval from the url
+- **dplyr**: for tasks involving data manipulation
+- **ggplot2**: for creating visualization
+- **patchwork**: for arranging multiple ggplot2 plots in a single canvas
+- **corrplot**: for displaying correlation matrices
+- **rpart**: for building decision trees
+- **rpart.plot**: for plotting decision trees
+
+```{r install_packages, echo=FALSE}
+# Install the required packages
+
 if (!requireNamespace("RCurl", quietly = TRUE)) {
   install.packages("RCurl")
 }
-
-# For tasks involving data manipulation
 if (!requireNamespace("dplyr", quietly = TRUE)) {
   install.packages("dplyr")
 }
-
-# For creating visualizations
 if (!requireNamespace("ggplot2", quietly = TRUE)) {
   install.packages("ggplot2")
 }
-
-# For arranging multiple ggplot2 plots in a single canvas.
 if (!requireNamespace("patchwork", quietly = TRUE)) {
   install.packages("patchwork")
 }
-
-# for displaying correlation matrices
 if (!requireNamespace("corrplot", quietly = TRUE)) {
   install.packages("corrplot")
 }
-```
+if (!requireNamespace("rpart", quietly = TRUE)) {
+  install.packages("rpart")
+}
+if (!requireNamespace("rpart.plot", quietly = TRUE)) {
+  install.packages("rpart.plot")
+}
+if (!requireNamespace("rattle", quietly = TRUE)) {
+  install.packages("rattle")
+}
 
-Load the required libraries
-```{r}
-library(RCurl)
-library(ggplot2)
-library(patchwork)
-library(corrplot)
-library(dplyr)
+# Load the required libraries
+library(RCurl) # For data retrieval from url
+library(ggplot2) # For creating visualizations
+library(patchwork) # For arranging multiple ggplot2 plots in a single canvas.
+library(corrplot) # For displaying correlation matrices
+library(dplyr) # For tasks involving data manipulation
 library(GGally)
+library(rpart)
+library(rpart.plot)
+library(rattle)
+library(rpart.plot)
+library(RColorBrewer)
 ```
 
 Load the dataset from UCI website using RCurl library
@@ -149,12 +155,12 @@ Heart.df <- read.csv(url(url), header = FALSE, na.strings = "?")
 ```
 
 Display dimensions of the dataframe
-```{r}
+```{r dimension, echo=FALSE}
 dim(Heart.df)
 ```
 
 View the first six rows of the dataset
-```{r}
+```{r sixrows, echo=FALSE}
 head(Heart.df)
 ```
 <br>
@@ -162,17 +168,17 @@ head(Heart.df)
 ### **Data Preprocessing**
 
 Renaming the column names for clarity
-```{r}
+```{r column_names}
 colnames(Heart.df) <- c("age", "sex", "cp", "trestbps", "chol", "fbs", "restecg", "thalach", "exang", "oldpeak", "slope", "ca", "thal", "target")
 ```
 
 Display the structure of the dataframe
-```{r}
+```{r structure, echo=FALSE}
 str(Heart.df)
 ```
 
 Display the statistical summary of the dataframe
-```{r}
+```{r stat_summary, echo=FALSE}
 summary(Heart.df)
 ```
 
@@ -265,9 +271,6 @@ g8 <- HeartDiseaseBar("thal")
 (g7 | g8)
 ```
 
-##### **Bar Plots Interpretation and Analysis**
-
-
 <br>
 
 #### **b. Histogram Distributions**
@@ -295,9 +298,6 @@ p5 <- HeartDiseaseHist("oldpeak")
 (p2 | p3) /
 (p4 | p5)
 ```
-
-##### **Histogram Plots Interpretation and Analysis**
-
 
 <br>
 
@@ -328,9 +328,6 @@ p5 <- HeartDiseaseBoxplot("target", "oldpeak")
 (p3 | p4) /
 (p5)
 ```
-
-##### **Box Plots Interpretation and Analysis**
-
 
 <br>
 
@@ -365,9 +362,6 @@ p7 <- HeartDiseaseScatter("thalach", "oldpeak")
 (p7)
 ```
 
-##### **Scatter Plots Interpretation and Analysis**
-
-
 <br>
 
 #### **e. Pair Plots**
@@ -378,9 +372,6 @@ ggpairs(Heart.df[, c("age", "trestbps", "chol",
                      "thalach", "oldpeak", "target")], 
         aes(color = target, fill = target))
 ```
-
-##### **Pair Plots Interpretation and Analysis**
-
 
 <br>
 
@@ -405,7 +396,53 @@ corrplot(correlation_matrix, method = "circle",
 ## **Modeling**
 <hr style="height:2px; border:none; color:green; background-color:green;" />
 
+Partition the data into 60% training and 40% validation.
+```{r}
+set.seed(123)
+training.rows <- sample(1:nrow(Heart.df), nrow(Heart.df) * 0.6)
+training.data <- Heart.df[training.rows, ]
 
+head(training.data)
+```
+
+Assign row IDs that are not in the training set into the validation set
+```{r}
+validation.rows <- setdiff(1:nrow(Heart.df), training.rows)
+validation.data <- Heart.df[validation.rows, ]
+
+head(validation.data)
+```
+
+Create decision tree model using the training data.
+```{r}
+heart_disease <- rpart(target ~ ., data = training.data, method = "class",
+                       control = rpart.control(minsplit = 20, minbucket = 7,
+                                               maxdepth = 10, usesurrogate = 2,
+                                               xval = 10)
+                       )
+
+heart_disease
+```
+
+Plot the tree
+```{rplot_tree, fig.width = 6, fig.height = 12}
+plot(heart_disease)
+text(heart_disease)
+```
+
+Beautify the decision tree
+Option 1
+```{r}
+prp(heart_disease, faclen = 0, cex = 0.8, extra = 1)
+```
+
+Option 2
+```{r}
+tot_count <- function(x, labs, digits, varlen) {
+  paste(labs, "\n\nn", x$frame$n)
+}
+prp(heart_disease, faclen = 0, cex = 0.8, node.fun = tot_count)
+```
 
 <br>
 

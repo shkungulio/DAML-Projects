@@ -1,7 +1,8 @@
 ---
-title: "Analyzing Heart Disease: Logistic Regression"
+title: "Predicting Heart Disease Risks"
+subtitle: "Using Random Forest Algorithm"
 author: "by Seif Kungulio"
-date: "2025-04-04"
+#date: "2025-04-04"
 output:
   html_document:
     theme: cosmo
@@ -9,7 +10,7 @@ output:
     toc_title: "Table of Contents"
     toc_float:
       collapsed: true
-      smooth_scroll: false
+      smooth_scroll: no
 ---
 
 ```{r setup, include=FALSE}
@@ -21,13 +22,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ## **Background & Introduction**
 <hr style="height:2px; border:none; color:green; background-color:green;" />
 
-Cardiovascular disease remains the leading cause of mortality worldwide, placing a significant burden on individuals, healthcare systems, and economies. Early identification of individuals at high risk for heart disease is essential for timely intervention and effective clinical decision-making. As the demand for data-driven healthcare continues to grow, predictive modeling plays an increasingly important role in supporting diagnosis and treatment pathways.
+Cardiovascular disease (CVD) remains one of the leading causes of morbidity and mortality worldwide. In clinical settings such as the cardiovascular unit at HCA Houston Healthcare – Clear Lake, where prompt and data-driven decisions are critical, predictive modeling can offer substantial support in identifying at-risk patients early. With the integration of electronic health records and increasing availability of clinical datasets, there is a growing interest in using machine learning techniques to enhance diagnostic accuracy and clinical decision-making.
 
-The UCI Heart Disease dataset is a widely recognized collection of patient data aimed at predicting the presence or absence of heart disease based on various clinical and demographic variables. The dataset contains multiple features such as age, sex, blood pressure, cholesterol levels, maximum heart rate, and other indicators collected from medical examinations.
+One such valuable dataset is the Heart Disease dataset from the UCI Machine Learning Repository. It contains various patient attributes (such as age, chest pain type, resting blood pressure, cholesterol levels, etc.) that can be leveraged to predict the likelihood of heart disease. This dataset has been widely used for benchmarking machine learning algorithms in healthcare analytics.
 
-This project explores the use of **logistic regression** to develop a predictive model for heart disease classification. Logistic regression is particularly suitable for binary classification problems, such as distinguishing between the presence or absence of a medical condition. The goal is to derive insights from the model that could potentially support clinicians in identifying at-risk individuals with greater confidence and accuracy.
-
-As a healthcare professional working in a cardiovascular unit, I have firsthand experience witnessing the impact of heart disease on patient outcomes. Integrating statistical modeling into clinical workflows holds promise for improving patient care, and this project aims to bridge practical healthcare knowledge with analytical techniques.    
+Random Forest, an ensemble learning technique, has gained popularity due to its robustness, ability to handle high-dimensional data, and its effectiveness in classification tasks. It operates by constructing a multitude of decision trees and aggregating their outputs to improve generalization and prevent overfitting. Given its strengths, Random Forest is well-suited to uncover non-linear relationships and complex interactions within clinical datasets.  
 <br>
 
 
@@ -35,20 +34,14 @@ As a healthcare professional working in a cardiovascular unit, I have firsthand 
 <hr style="height:2px; border:none; color:green; background-color:green;" />
 
 ### **Problem Statement**
-Heart disease diagnosis often requires a combination of clinical judgment and diagnostic tests, which may not always be readily accessible or conclusive. Therefore, the ability to predict the likelihood of heart disease using easily obtainable patient data can assist healthcare professionals in prioritizing care and initiating early interventions.
+The objective of this project is to build a Random Forest model to predict the presence or absence of heart disease using the UCI Heart Disease dataset. The aim is to evaluate the model’s ability to accurately classify patients based on a variety of health indicators, and ultimately determine the most influential features contributing to heart disease risk.
 
-This project seeks to answer the following question:
+By applying the Random Forest algorithm, we seek to answer the following key questions:
+- Can we reliably predict heart disease outcomes using clinical attributes from the dataset?
+- Which features are most important in driving model predictions?
+- How does the Random Forest model’s performance compare to traditional or simpler classification methods?
 
-> **Can we build a logistic regression model that accurately predicts the presence of heart disease based on clinical and demographic attributes in the UCI dataset?**
-
-To address this, we will:
-- Clean and preprocess the dataset.
-- Explore variable relationships through statistical summaries and visualizations.
-- Train a logistic regression model using key predictors.
-- Evaluate the model's performance using accuracy, sensitivity, specificity, and AUC-ROC metrics.
-- Interpret the significance of predictors to inform potential clinical relevance.
-
-By leveraging logistic regression, this study aims to provide a simple yet interpretable model that can support healthcare providers in risk stratification and decision-making processes.  
+The insights from this model can potentially aid healthcare professionals in early identification of high-risk patients, thereby supporting preventive care and timely medical intervention.  
 <br>
 
 
@@ -229,6 +222,7 @@ for (col in names(categorical_columns)) {
 }
 ```
 
+<br>
 
 ### **EDA through Visualization**
 
@@ -265,9 +259,6 @@ g8 <- HeartDiseaseBar("thal")
 (g7 | g8)
 ```
 
-##### **Bar Plots Interpretation and Analysis**
-
-
 <br>
 
 #### **b. Histogram Distributions**
@@ -295,9 +286,6 @@ p5 <- HeartDiseaseHist("oldpeak")
 (p2 | p3) /
 (p4 | p5)
 ```
-
-##### **Histogram Plots Interpretation and Analysis**
-
 
 <br>
 
@@ -328,9 +316,6 @@ p5 <- HeartDiseaseBoxplot("target", "oldpeak")
 (p3 | p4) /
 (p5)
 ```
-
-##### **Box Plots Interpretation and Analysis**
-
 
 <br>
 
@@ -365,9 +350,6 @@ p7 <- HeartDiseaseScatter("thalach", "oldpeak")
 (p7)
 ```
 
-##### **Scatter Plots Interpretation and Analysis**
-
-
 <br>
 
 #### **e. Pair Plots**
@@ -378,9 +360,6 @@ ggpairs(Heart.df[, c("age", "trestbps", "chol",
                      "thalach", "oldpeak", "target")], 
         aes(color = target, fill = target))
 ```
-
-##### **Pair Plots Interpretation and Analysis**
-
 
 <br>
 
