@@ -97,6 +97,7 @@ Install and load the following packages if they are not already installed.
 
 - **RCurl**: for data retrieval from the url
 - **dplyr**: for tasks involving data manipulation
+- **caret**: for 
 - **ggplot2**: for creating visualization
 - **patchwork**: for arranging multiple ggplot2 plots in a single canvas
 - **corrplot**: for displaying correlation matrices
@@ -111,6 +112,9 @@ if (!requireNamespace("RCurl", quietly = TRUE)) {
 }
 if (!requireNamespace("dplyr", quietly = TRUE)) {
   install.packages("dplyr")
+}
+if (!requireNamespace("caret", quietly = TRUE)) {
+  install.packages("caret")
 }
 if (!requireNamespace("ggplot2", quietly = TRUE)) {
   install.packages("ggplot2")
@@ -138,6 +142,7 @@ library(patchwork) # For arranging multiple ggplot2 plots in a single canvas.
 library(corrplot) # For displaying correlation matrices
 library(dplyr) # For tasks involving data manipulation
 library(GGally)
+library(caret)
 library(rpart)
 library(rpart.plot)
 library(rattle)
@@ -415,33 +420,32 @@ head(validation.data)
 
 Create decision tree model using the training data.
 ```{r}
-heart_disease <- rpart(target ~ ., data = training.data, method = "class",
+dt_model <- rpart(target ~ ., data = training.data, method = "class",
                        control = rpart.control(minsplit = 20, minbucket = 7,
                                                maxdepth = 10, usesurrogate = 2,
                                                xval = 10)
                        )
 
-heart_disease
+dt_model
 ```
 
-Plot the tree
+Display statistical summary of the model
+```{r}
+summary(dt_model)
+```
+
+Plot the decision tree
 ```{rplot_tree, fig.width = 6, fig.height = 12}
-plot(heart_disease)
-text(heart_disease)
+plot(dt_model)
+text(dt_model)
 ```
 
 Beautify the decision tree
-Option 1
-```{r}
-prp(heart_disease, faclen = 0, cex = 0.8, extra = 1)
-```
-
-Option 2
 ```{r}
 tot_count <- function(x, labs, digits, varlen) {
   paste(labs, "\n\nn", x$frame$n)
 }
-prp(heart_disease, faclen = 0, cex = 0.8, node.fun = tot_count)
+prp(dt_model, faclen = 0, cex = 0.8, node.fun = tot_count)
 ```
 
 <br>
@@ -450,9 +454,51 @@ prp(heart_disease, faclen = 0, cex = 0.8, node.fun = tot_count)
 ## **Evaluation**
 <hr style="height:2px; border:none; color:green; background-color:green;" />
 
+Predict on the test set
+```{r}
+predictions <- predict(dt_model, validation.data, type = "class")
+```
 
+Confusion matrix
+```{r}
+confMatrix <- confusionMatrix(predictions, validation.data$target)
+print(confMatrix)
+```
 
+### **Metrics Observations**
 
+* **Accuracy:** The proportion of all correct predictions (both true positives and true negatives) out of all predictions.
+that considers both false positives and false negatives.  
+
+* **Sensitivity (Recall):** The proportion of actual positive cases correctly identified as positive (True Positives / (True Positives + False Negatives)).
+that considers both false positives and false negatives.  
+
+* **Specificity:** The proportion of actual negative cases correctly identified as negative (True Negatives / (True Negatives + False Positives)).  
+
+* **Precision (Positive Predictive Value):** The proportion of positive predictions that are actually correct (True Positives / (True Positives + False Positives)).  
+
+* **F1 Score:** The harmonic mean of Precision and Recall, providing a balanced measure that considers both false positives and false negatives.
+```{r metrics, echo=FALSE}
+# Extract accuracy
+accuracy <- confMatrix$overall['Accuracy']
+cat("Accuracy:", accuracy, "\n")
+
+# Extract sensitivity (Recall for the positive class)
+sensitivity <- confMatrix$byClass['Sensitivity']
+cat("Sensitivity (Recall):", sensitivity, "\n")
+
+# Extract specificity (Recall for the negative class)
+specificity <- confMatrix$byClass['Specificity']
+cat("Specificity:", specificity, "\n")
+
+# Extract Precision (Positive Predictive Value)
+precision <- confMatrix$byClass['Precision']
+cat("Precision:", precision, "\n")
+
+# Extract F1 Score
+f1_score <- confMatrix$byClass['F1']
+cat("F1 Score:", f1_score, "\n")
+```
 
 <br>
 
