@@ -1,0 +1,407 @@
+---
+title: 'Analyzing Heart Disease: EDA'
+author: "by Seif Kungulio"
+date: "2025-04-04"
+output:
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_title: "Table of Contents"
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<hr style="height:5px; border:none; color:red; background-color:red;" /><br>
+
+
+## **Background & Introduction**
+<hr style="height:2px; border:none; color:green; background-color:green;" />
+
+Heart disease is a leading global health concern, accounting for a significant number of deaths each year. It encompasses various conditions affecting the heart, including coronary artery disease, heart attacks, and arrhythmias. Early detection and accurate diagnosis are critical in preventing complications and improving patient outcomes.
+
+The UCI Heart Disease Dataset is a widely used dataset in medical data analysis, containing patient attributes such as age, cholesterol levels, blood pressure, chest pain type, and other key indicators. Analyzing this data can help identify patterns and correlations that contribute to heart disease.
+
+Data visualization plays a crucial role in understanding complex medical datasets. By employing exploratory data analysis (EDA) and visualization techniques, we can uncover hidden trends, compare different risk factors, and gain insights that support medical decision-making. This project aims to utilize various data visualization methods to analyze the dataset and provide a clearer understanding of the factors influencing heart disease.
+
+By identifying significant risk factors and visualizing their impact, this project can contribute to early diagnosis strategies, patient awareness, and potential predictive modeling for heart disease detection.  
+<br>
+
+
+## **Business Understanding**
+<hr style="height:2px; border:none; color:green; background-color:green;" />
+
+### **Problem Statement**
+This project aims to analyze and visualize the dataset to uncover trends, correlations, and patterns that distinguish individuals with heart disease from those without. By leveraging data visualization techniques, we seek to answer the following questions:
+
+  + What are the most influential factors associated with heart disease?
+
+  + How do age, cholesterol levels, blood pressure, and other risk factors correlate with heart disease presence?
+
+  + Can we identify clear patterns in the data that help in early diagnosis?
+
+The findings from this analysis can serve as a foundation for further predictive modeling, aiding healthcare professionals in making data-driven decisions for heart disease risk assessment.  
+<br>
+
+
+## **Data Understanding**
+<hr style="height:2px; border:none; color:green; background-color:green;" />
+
+The dataset contains various features related to patients' health and demographic information. We will explore the dataset to understand its structure and relationships between variables.
+
+### **Data Dictionary**
+The dataset contains 14 key attributes that are either numerical or categorical. These attributes are:
+
+  1. **age:** Age of the patient (numeric)
+  2. **sex:** Gender of the patient (1 = male, 0 = female)
+  3. **cp:** Chest pain type (categorical: 1-4)
+  4. **trestbps:** Resting blood pressure (numeric)
+  5. **chol:** Serum cholesterol (numeric)
+  6. **fbs:** Fasting blood sugar (1 = true, 0 = false)
+  7. **restecg:** Resting electrocardiographic results (categorical)
+  8. **thalach:** Maximum heart rate achieved (numeric)
+  9. **exang:** Exercise-induced angina (1 = yes, 0 = no)
+  10. **oldpeak:** ST depression induced by exercise (numeric)
+  11. **slope:** The slope of the peak exercise ST segment (categorical)
+  12. **ca:** Number of major vessels (0-3, numeric)
+  13. **thal:** Thalassemia (categorical: 1 = normal, 2 = fixed defect, 3 = reversible defect)
+  14. **target:** Heart disease (1 = disease, 0 = no disease)  
+  
+<br>
+  
+|**Attribute**| **Type** | **Description** | **Contraints/Rules** |
+|:--------------|:---------|:----------------|:---------------------|
+| **age** | Numerical | The age of the patient in years | Range: 29 - 77 (Based on the dataset statistics) |
+| **sex** | Categorical | The gender of the patient | Values: 1 = Male, 0 = Female |
+| **cp** | Categorical | Type of chest pain experienced by the patient | Values: 1 = Typical angina, 2 = Atypical angina, 3 = Non-anginal pain, 4 = Asymptomatic |
+| **trestbps** | Numerical | Resting blood pressure of the patient, measured in mmHg | Range: Typically, between 94 and 200 mmHg |
+| **chol** | Numerical | Serum cholesterol level in mg/dl | Range: Typically, between 126 and 564 mg/dl |
+| **fbs** | Categorical | Fasting blood sugar level > 120 mg/dl | Values: 1 = True, 0 = False |
+| **restecg** | Categorical | Results of the patient’s resting electrocardiogram | Values: 0 = Normal, 1 = ST-T wave abnormality, 2 = Probable or definite left ventricular hypertrophy |
+| **thalach** | Numerical | Maximum heart rate achieved during a stress test | Range: Typically, between 71 and 202 bpm |
+| **exang** | Categorical | Whether the patient experiences exercise-induced angina | Values: 1 = Yes, 0 = No |
+| **oldpeak** | Numerical | ST depression induced by exercise relative to rest (an ECG measure) | Range: 0.0 to 6.2 (higher values indicate more severe abnormalities) |
+| **slope** | Categorical | Slope of the peak exercise ST segment | Values: 1 = Upsloping, 2 = Flat, 3 = Downsloping |
+| **ca** | Numerical | Number of major vessels colored by fluoroscopy | Range: 0-3 |
+| **thal** | Categorical | Blood disorder variable related to thalassemia | Values: 3 = Normal, 6 = Fixed defect, 7 = Reversible defect |
+| **target** | Categorical | Diagnosis of heart disease | Values: 0 = No heart disease, 1 = Presence of heart disease |
+|   |   |   |   |
+<br>
+
+
+## **Data Preparation**
+<hr style="height:2px; border:none; color:green; background-color:green;" />
+
+### **Data Loading**
+Install necessary packages if they are not already installed.
+```{r}
+# For data retrieval from url
+if (!requireNamespace("RCurl", quietly = TRUE)) {
+  install.packages("RCurl")
+}
+
+# For tasks involving data manipulation
+if (!requireNamespace("dplyr", quietly = TRUE)) {
+  install.packages("dplyr")
+}
+
+# For creating visualizations
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2")
+}
+
+# For arranging multiple ggplot2 plots in a single canvas.
+if (!requireNamespace("patchwork", quietly = TRUE)) {
+  install.packages("patchwork")
+}
+
+# for displaying correlation matrices
+if (!requireNamespace("corrplot", quietly = TRUE)) {
+  install.packages("corrplot")
+}
+```
+
+Load the required libraries
+```{r}
+library(RCurl)
+library(ggplot2)
+library(patchwork)
+library(corrplot)
+library(dplyr)
+library(GGally)
+```
+
+Load the dataset from UCI website using RCurl library
+```{r}
+# Create url object to retrieve the dataset from UCI Machine Learning Repository
+url <- "https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data"
+
+# Read the dataset into a dataframe
+Heart.df <- read.csv(url(url), header = FALSE, na.strings = "?")
+```
+
+Display dimensions of the dataframe
+```{r}
+dim(Heart.df)
+```
+
+View the first six rows of the dataset
+```{r}
+head(Heart.df)
+```
+<br>
+
+### **Data Preprocessing**
+
+Renaming the column names for clarity
+```{r}
+colnames(Heart.df) <- c("age", "sex", "cp", "trestbps", "chol", "fbs", "restecg", "thalach", "exang", "oldpeak", "slope", "ca", "thal", "target")
+```
+
+Display the structure of the dataframe
+```{r}
+str(Heart.df)
+```
+
+Display the statistical summary of the dataframe
+```{r}
+summary(Heart.df)
+```
+
+According to the Data Dictionary, the following attributes should be have binary variables, `sex`, `fbs`, `exang`, and `target`. But, some shows to have values besides 0's and 1's.  
+Let's convert binary variables to (0, 1)
+```{r}
+Heart.df$sex <- ifelse(Heart.df$sex > 0, 1, 0)
+Heart.df$fbs <- ifelse(Heart.df$fbs > 0, 1, 0)
+Heart.df$exang <- ifelse(Heart.df$exang > 0, 1, 0)
+Heart.df$target <- ifelse(Heart.df$target > 0, 1, 0)
+```
+
+Check to see if there are missing values in the dataframe
+```{r}
+sapply(Heart.df, function(x) sum(is.na(x)))
+```
+
+From the summary and the table above, there are some missing values in `ca` and `thal` columns.  
+Let's handle the missing values using mean/mode imputation method
+```{r}
+# If missing values exist in 'ca' or 'thal', handle them using mean/mode imputation
+Heart.df$ca[is.na(Heart.df$ca)] <- median(Heart.df$ca, na.rm = TRUE)
+Heart.df$ca[Heart.df$ca == "?"] <- median(Heart.df$ca, na.rm = TRUE)
+Heart.df$thal[is.na(Heart.df$thal)] <- median(Heart.df$thal, na.rm = TRUE)
+Heart.df$thal[Heart.df$thal == "?"] <- median(Heart.df$ca, na.rm = TRUE)
+```
+
+Check for duplicate entries in the dataframe and print them out
+```{r}
+dupes <- Heart.df[duplicated(Heart.df) | duplicated(Heart.df, fromLast = TRUE), ]
+# Print or inspect the duplicate entries
+print(dupes)
+```
+
+Convert categorical attributes to factors
+```{r factorization}
+# Define a list of categorical columns with their levels and labels
+categorical_columns <- list(
+  sex = list(levels = c(0, 1), labels = c("Female", "Male")),
+  cp = list(levels = c(1, 2, 3, 4), labels = c("Typical Angina", "Atypical Angina", "Non-Angina", "Asymptomatic")),
+  fbs = list(levels = c(0, 1), labels = c("False", "True")),
+  restecg = list(levels = c(0, 1, 2), labels = c("Normal", "Wave-abnormality", "Probable")),
+  exang = list(levels = c(0, 1), labels = c("No", "Yes")),
+  slope = list(levels = c(1, 2, 3), labels = c("Upsloping", "Flat", "Downsloping")),
+  thal = list(levels = c(3, 6, 7), labels = c("Normal", "Fixed Defect", "Reversible")),
+  target = list(levels = c(1, 0), labels = c("Yes", "No"))
+)
+
+# Apply the factor transformation using a loop
+for (col in names(categorical_columns)) {
+  Heart.df[[col]] <- factor(Heart.df[[col]], 
+                            levels = categorical_columns[[col]]$levels, 
+                            labels = categorical_columns[[col]]$labels)
+}
+```
+
+
+### **EDA through Visualization**
+
+#### **a. Barplots**
+
+```{r bar_function, echo=FALSE}
+HeartDiseaseBar <- function(var) {
+  ggplot(Heart.df, aes(x = .data[[var]], fill = target)) +
+    geom_bar(position = "dodge") + theme_test() +
+    labs(title = paste("Distribution of Heart Disease by", var),
+         x = var, fill = "Heart Disease")
+}
+```
+
+Create the distribution of heart disease by categorical variables
+```{r, fig.width = 12, fig.height = 16}
+# Create the plots
+g1 <- ggplot(Heart.df, aes(x=target, fill=target))+
+  geom_bar() + theme_test() +
+  ggtitle("Distribution of Heart Disease") +
+  labs(x = "Heart Disease", fill = "Heart Disease")
+g2 <- HeartDiseaseBar("sex")
+g3 <- HeartDiseaseBar("cp")
+g4 <- HeartDiseaseBar("fbs")
+g5 <- HeartDiseaseBar("restecg")
+g6 <- HeartDiseaseBar("exang")
+g7 <- HeartDiseaseBar("slope")
+g8 <- HeartDiseaseBar("thal")
+
+# Combine plot using patchwork
+(g1 | g2) /
+(g3 | g4) /
+(g5 | g6) /
+(g7 | g8)
+```
+
+##### **Bar Plots Interpretation and Analysis**
+
+
+<br>
+
+#### **b. Histogram Distributions**
+
+```{r histogram_function, echo=FALSE}
+HeartDiseaseHist <- function(var1) {
+  ggplot(Heart.df, aes(x = .data[[var1]], fill = target)) +
+    geom_histogram(bins = 15) + theme_test() +
+    labs(title = paste("Distribution of", var1),
+         x = var1, fill = "Heart Disease")
+}
+```
+
+Create histogram distributions of continuous variables.  
+```{r, fig.width = 12, fig.height = 12}
+# Create the plots
+p1 <- HeartDiseaseHist("age")
+p2 <- HeartDiseaseHist("trestbps")
+p3 <- HeartDiseaseHist("chol")
+p4 <- HeartDiseaseHist("thalach")
+p5 <- HeartDiseaseHist("oldpeak")
+
+# Combine plot using patchwork
+(p1) /
+(p2 | p3) /
+(p4 | p5)
+```
+
+##### **Histogram Plots Interpretation and Analysis**
+
+
+<br>
+
+#### **c. Boxplots**
+
+```{r boxplot_function, echo=FALSE}
+HeartDiseaseBoxplot <- function(var1, var2) {
+  ggplot(Heart.df, aes(x = .data[[var1]],
+                       y = .data[[var2]],
+                       fill = .data[[var1]])) +
+    geom_boxplot() + theme_test() +
+    labs(title = paste("Boxplot of", var2, "by", var1),
+         x = var1, y = var2, fill = "Heart Disease")
+}
+```
+
+Create boxplots of continuous variables.  
+```{r, fig.width = 12, fig.height = 12}
+# Create the plots
+p1 <- HeartDiseaseBoxplot("target", "age")
+p2 <- HeartDiseaseBoxplot("target", "trestbps")
+p3 <- HeartDiseaseBoxplot("target", "chol")
+p4 <- HeartDiseaseBoxplot("target", "thalach")
+p5 <- HeartDiseaseBoxplot("target", "oldpeak")
+
+# Combine plot using patchwork
+(p1 | p2) /
+(p3 | p4) /
+(p5)
+```
+
+##### **Box Plots Interpretation and Analysis**
+
+
+<br>
+
+#### **d. Scaterplots**
+```{r scatterfunction, echo=FALSE}
+HeartDiseaseScatter <- function(point1, point2){
+  ggplot(Heart.df, aes(x = .data[[point1]],
+                       y = .data[[point2]],
+                       color = target)) +
+    geom_point(size = 2) + theme_test() +
+    geom_smooth(method = "lm", se = FALSE, color = "blue", formula = y ~ x) +
+    labs(title = paste("Scatterplot of", point1, "by", point2),
+       x = point1, y = point2, color = "Heart Disease")
+}
+```
+
+Create scatterplots of continuous variables. 
+```{r scatterplot, fig.width = 12, fig.height = 16}
+# Create the plots
+p1 <- HeartDiseaseScatter("age", "oldpeak")
+p2 <- HeartDiseaseScatter("age", "chol")
+p3 <- HeartDiseaseScatter("age", "trestbps")
+p4 <- HeartDiseaseScatter("age", "thalach")
+p5 <- HeartDiseaseScatter("chol", "thalach")
+p6 <- HeartDiseaseScatter("trestbps", "chol")
+p7 <- HeartDiseaseScatter("thalach", "oldpeak")
+
+# Combine plot using patchwork
+(p1 | p2) /
+(p3 | p4) /
+(p5 | p6) /
+(p7)
+```
+
+##### **Scatter Plots Interpretation and Analysis**
+
+
+<br>
+
+#### **e. Pair Plots**
+Pairwise relationship between multiple continuous variables
+```{r pair_plots, fig.width = 12, fig.height = 6}
+# Create a colored pair plot for selected variables
+ggpairs(Heart.df[, c("age", "trestbps", "chol", 
+                     "thalach", "oldpeak", "target")], 
+        aes(color = target, fill = target))
+```
+
+##### **Pair Plots Interpretation and Analysis**
+
+
+<br>
+
+#### **f. Correlation Matrix**
+Correlation matrix for continuous variables
+```{r correlation_matrix}
+# Selecting only continuous variables
+continuous_vars <- c("age", "trestbps", "chol", "thalach", "oldpeak")
+continuous_data <- Heart.df %>% select(all_of(continuous_vars))
+
+# Calculating correlation matrix
+correlation_matrix <- cor(continuous_data)
+
+# Plotting the correlation matrix
+corrplot(correlation_matrix, method = "circle",
+         type = "lower", tl.col = "black")
+```
+
+<br>
+
+
+## **Conclusion**
+<hr style="height:2px; border:none; color:green; background-color:green;" />
+
+
+
+
+
+
