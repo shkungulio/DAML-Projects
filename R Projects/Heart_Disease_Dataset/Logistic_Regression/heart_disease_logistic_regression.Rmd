@@ -1,0 +1,14 @@
+---
+title: "Unveiling Heart Disease Trends with Logistic Regression"
+author: "by Seif Kungulio"
+date: "2025-04-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## **Background and Introduction**
+
+
