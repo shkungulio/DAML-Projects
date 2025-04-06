@@ -104,7 +104,7 @@ Install and load the following packages if they are not already installed.
 - **rpart**: for building decision trees
 - **rpart.plot**: for plotting decision trees
 
-```{r install_packages, echo=FALSE}
+```{r install_packages}
 # Install the required packages
 
 if (!requireNamespace("RCurl", quietly = TRUE)) {
@@ -160,12 +160,12 @@ Heart.df <- read.csv(url(url), header = FALSE, na.strings = "?")
 ```
 
 Display dimensions of the dataframe
-```{r dimension, echo=FALSE}
+```{r dimension}
 dim(Heart.df)
 ```
 
 View the first six rows of the dataset
-```{r sixrows, echo=FALSE}
+```{r sixrows}
 head(Heart.df)
 ```
 <br>
@@ -178,12 +178,12 @@ colnames(Heart.df) <- c("age", "sex", "cp", "trestbps", "chol", "fbs", "restecg"
 ```
 
 Display the structure of the dataframe
-```{r structure, echo=FALSE}
+```{r structure}
 str(Heart.df)
 ```
 
 Display the statistical summary of the dataframe
-```{r stat_summary, echo=FALSE}
+```{r stat_summary}
 summary(Heart.df)
 ```
 
@@ -308,7 +308,7 @@ p5 <- HeartDiseaseHist("oldpeak")
 
 #### **c. Boxplots**
 
-```{r boxplot_function, echo=FALSE}
+```{r boxplot_function}
 HeartDiseaseBoxplot <- function(var1, var2) {
   ggplot(Heart.df, aes(x = .data[[var1]],
                        y = .data[[var2]],
@@ -337,7 +337,7 @@ p5 <- HeartDiseaseBoxplot("target", "oldpeak")
 <br>
 
 #### **d. Scaterplots**
-```{r scatterfunction, echo=FALSE}
+```{r scatter_plot}
 HeartDiseaseScatter <- function(point1, point2){
   ggplot(Heart.df, aes(x = .data[[point1]],
                        y = .data[[point2]],
@@ -469,32 +469,37 @@ print(confMatrix)
 
 * **Accuracy:** The proportion of all correct predictions (both true positives and true negatives) out of all predictions.
 that considers both false positives and false negatives.  
-
-* **Sensitivity (Recall):** The proportion of actual positive cases correctly identified as positive (True Positives / (True Positives + False Negatives)).
-that considers both false positives and false negatives.  
-
-* **Specificity:** The proportion of actual negative cases correctly identified as negative (True Negatives / (True Negatives + False Positives)).  
-
-* **Precision (Positive Predictive Value):** The proportion of positive predictions that are actually correct (True Positives / (True Positives + False Positives)).  
-
-* **F1 Score:** The harmonic mean of Precision and Recall, providing a balanced measure that considers both false positives and false negatives.
-```{r metrics, echo=FALSE}
+```{r accuracy_metrics}
 # Extract accuracy
 accuracy <- confMatrix$overall['Accuracy']
 cat("Accuracy:", accuracy, "\n")
+```
 
+* **Sensitivity (Recall):** The proportion of actual positive cases correctly identified as positive (True Positives / (True Positives + False Negatives)).
+that considers both false positives and false negatives.  
+```{r recall_metrics}
 # Extract sensitivity (Recall for the positive class)
 sensitivity <- confMatrix$byClass['Sensitivity']
 cat("Sensitivity (Recall):", sensitivity, "\n")
+```
 
+* **Specificity:** The proportion of actual negative cases correctly identified as negative (True Negatives / (True Negatives + False Positives)).  
+```{r specificity_metrics}
 # Extract specificity (Recall for the negative class)
 specificity <- confMatrix$byClass['Specificity']
 cat("Specificity:", specificity, "\n")
+```
 
+* **Precision (Positive Predictive Value):** The proportion of positive predictions that are actually correct (True Positives / (True Positives + False Positives)).  
+```{r precision_metrics}
 # Extract Precision (Positive Predictive Value)
 precision <- confMatrix$byClass['Precision']
 cat("Precision:", precision, "\n")
 
+```
+
+* **F1 Score:** The harmonic mean of Precision and Recall, providing a balanced measure that considers both false positives and false negatives.
+```{r f1_metrics}
 # Extract F1 Score
 f1_score <- confMatrix$byClass['F1']
 cat("F1 Score:", f1_score, "\n")
@@ -515,9 +520,5 @@ cat("F1 Score:", f1_score, "\n")
 
 ## **Conclusion**
 <hr style="height:2px; border:none; color:green; background-color:green;" />
-
-
-
-
 
 

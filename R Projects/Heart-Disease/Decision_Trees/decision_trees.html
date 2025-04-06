@@ -1728,7 +1728,43 @@ a single canvas</li>
 <li><strong>rpart</strong>: for building decision trees</li>
 <li><strong>rpart.plot</strong>: for plotting decision trees</li>
 </ul>
+<pre class="r"><code># Install the required packages
+
+if (!requireNamespace(&quot;RCurl&quot;, quietly = TRUE)) {
+  install.packages(&quot;RCurl&quot;)
+}
+if (!requireNamespace(&quot;dplyr&quot;, quietly = TRUE)) {
+  install.packages(&quot;dplyr&quot;)
+}
+if (!requireNamespace(&quot;caret&quot;, quietly = TRUE)) {
+  install.packages(&quot;caret&quot;)
+}
+if (!requireNamespace(&quot;ggplot2&quot;, quietly = TRUE)) {
+  install.packages(&quot;ggplot2&quot;)
+}
+if (!requireNamespace(&quot;patchwork&quot;, quietly = TRUE)) {
+  install.packages(&quot;patchwork&quot;)
+}
+if (!requireNamespace(&quot;corrplot&quot;, quietly = TRUE)) {
+  install.packages(&quot;corrplot&quot;)
+}
+if (!requireNamespace(&quot;rpart&quot;, quietly = TRUE)) {
+  install.packages(&quot;rpart&quot;)
+}
+if (!requireNamespace(&quot;rpart.plot&quot;, quietly = TRUE)) {
+  install.packages(&quot;rpart.plot&quot;)
+}
+if (!requireNamespace(&quot;rattle&quot;, quietly = TRUE)) {
+  install.packages(&quot;rattle&quot;)
+}
+
+# Load the required libraries
+library(RCurl) # For data retrieval from url
+library(ggplot2) # For creating visualizations
+library(patchwork) # For arranging multiple ggplot2 plots in a single canvas.
+library(corrplot) # For displaying correlation matrices</code></pre>
 <pre><code>## corrplot 0.95 loaded</code></pre>
+<pre class="r"><code>library(dplyr) # For tasks involving data manipulation</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;dplyr&#39;</code></pre>
 <pre><code>## The following objects are masked from &#39;package:stats&#39;:
@@ -1737,15 +1773,22 @@ a single canvas</li>
 <pre><code>## The following objects are masked from &#39;package:base&#39;:
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(GGally)</code></pre>
 <pre><code>## Registered S3 method overwritten by &#39;GGally&#39;:
 ##   method from   
 ##   +.gg   ggplot2</code></pre>
+<pre class="r"><code>library(caret)</code></pre>
 <pre><code>## Loading required package: lattice</code></pre>
+<pre class="r"><code>library(rpart)
+library(rpart.plot)
+library(rattle)</code></pre>
 <pre><code>## Loading required package: tibble</code></pre>
 <pre><code>## Loading required package: bitops</code></pre>
 <pre><code>## Rattle: A free graphical interface for data science with R.
 ## Version 5.5.1 Copyright (c) 2006-2021 Togaware Pty Ltd.
 ## Type &#39;rattle()&#39; to shake, rattle, and roll your data.</code></pre>
+<pre class="r"><code>library(rpart.plot)
+library(RColorBrewer)</code></pre>
 <p>Load the dataset from UCI website using RCurl library</p>
 <pre class="r"><code># Create url object to retrieve the dataset from UCI Machine Learning Repository
 url &lt;- &quot;https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data&quot;
@@ -1753,8 +1796,10 @@ url &lt;- &quot;https://archive.ics.uci.edu/ml/machine-learning-databases/heart-
 # Read the dataset into a dataframe
 Heart.df &lt;- read.csv(url(url), header = FALSE, na.strings = &quot;?&quot;)</code></pre>
 <p>Display dimensions of the dataframe</p>
+<pre class="r"><code>dim(Heart.df)</code></pre>
 <pre><code>## [1] 303  14</code></pre>
 <p>View the first six rows of the dataset</p>
+<pre class="r"><code>head(Heart.df)</code></pre>
 <pre><code>##   V1 V2 V3  V4  V5 V6 V7  V8 V9 V10 V11 V12 V13 V14
 ## 1 63  1  1 145 233  1  2 150  0 2.3   3   0   6   0
 ## 2 67  1  4 160 286  0  2 108  1 1.5   2   3   3   2
@@ -1769,6 +1814,7 @@ Heart.df &lt;- read.csv(url(url), header = FALSE, na.strings = &quot;?&quot;)</c
 <p>Renaming the column names for clarity</p>
 <pre class="r"><code>colnames(Heart.df) &lt;- c(&quot;age&quot;, &quot;sex&quot;, &quot;cp&quot;, &quot;trestbps&quot;, &quot;chol&quot;, &quot;fbs&quot;, &quot;restecg&quot;, &quot;thalach&quot;, &quot;exang&quot;, &quot;oldpeak&quot;, &quot;slope&quot;, &quot;ca&quot;, &quot;thal&quot;, &quot;target&quot;)</code></pre>
 <p>Display the structure of the dataframe</p>
+<pre class="r"><code>str(Heart.df)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    303 obs. of  14 variables:
 ##  $ age     : num  63 67 67 37 41 56 62 57 63 53 ...
 ##  $ sex     : num  1 1 1 1 0 1 0 0 1 1 ...
@@ -1785,6 +1831,7 @@ Heart.df &lt;- read.csv(url(url), header = FALSE, na.strings = &quot;?&quot;)</c
 ##  $ thal    : num  6 3 7 3 3 3 3 3 7 7 ...
 ##  $ target  : int  0 2 1 0 0 0 3 0 2 1 ...</code></pre>
 <p>Display the statistical summary of the dataframe</p>
+<pre class="r"><code>summary(Heart.df)</code></pre>
 <pre><code>##       age             sex               cp           trestbps    
 ##  Min.   :29.00   Min.   :0.0000   Min.   :1.000   Min.   : 94.0  
 ##  1st Qu.:48.00   1st Qu.:0.0000   1st Qu.:3.000   1st Qu.:120.0  
@@ -1912,6 +1959,14 @@ p5 &lt;- HeartDiseaseHist(&quot;oldpeak&quot;)
 </div>
 <div id="c.-boxplots" class="section level4">
 <h4><strong>c. Boxplots</strong></h4>
+<pre class="r"><code>HeartDiseaseBoxplot &lt;- function(var1, var2) {
+  ggplot(Heart.df, aes(x = .data[[var1]],
+                       y = .data[[var2]],
+                       fill = .data[[var1]])) +
+    geom_boxplot() + theme_test() +
+    labs(title = paste(&quot;Boxplot of&quot;, var2, &quot;by&quot;, var1),
+         x = var1, y = var2, fill = &quot;Heart Disease&quot;)
+}</code></pre>
 <p>Create boxplots of continuous variables.</p>
 <pre class="r"><code># Create the plots
 p1 &lt;- HeartDiseaseBoxplot(&quot;target&quot;, &quot;age&quot;)
@@ -1929,6 +1984,15 @@ p5 &lt;- HeartDiseaseBoxplot(&quot;target&quot;, &quot;oldpeak&quot;)
 </div>
 <div id="d.-scaterplots" class="section level4">
 <h4><strong>d. Scaterplots</strong></h4>
+<pre class="r"><code>HeartDiseaseScatter &lt;- function(point1, point2){
+  ggplot(Heart.df, aes(x = .data[[point1]],
+                       y = .data[[point2]],
+                       color = target)) +
+    geom_point(size = 2) + theme_test() +
+    geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;blue&quot;, formula = y ~ x) +
+    labs(title = paste(&quot;Scatterplot of&quot;, point1, &quot;by&quot;, point2),
+       x = point1, y = point2, color = &quot;Heart Disease&quot;)
+}</code></pre>
 <p>Create scatterplots of continuous variables.</p>
 <pre class="r"><code># Create the plots
 p1 &lt;- HeartDiseaseScatter(&quot;age&quot;, &quot;oldpeak&quot;)
@@ -2261,28 +2325,50 @@ print(confMatrix)</code></pre>
 <div id="metrics-observations" class="section level3">
 <h3><strong>Metrics Observations</strong></h3>
 <ul>
-<li><p><strong>Accuracy:</strong> The proportion of all correct
-predictions (both true positives and true negatives) out of all
-predictions. that considers both false positives and false
-negatives.</p></li>
-<li><p><strong>Sensitivity (Recall):</strong> The proportion of actual
+<li><strong>Accuracy:</strong> The proportion of all correct predictions
+(both true positives and true negatives) out of all predictions. that
+considers both false positives and false negatives.</li>
+</ul>
+<pre class="r"><code># Extract accuracy
+accuracy &lt;- confMatrix$overall[&#39;Accuracy&#39;]
+cat(&quot;Accuracy:&quot;, accuracy, &quot;\n&quot;)</code></pre>
+<pre><code>## Accuracy: 0.8032787</code></pre>
+<ul>
+<li><strong>Sensitivity (Recall):</strong> The proportion of actual
 positive cases correctly identified as positive (True Positives / (True
 Positives + False Negatives)). that considers both false positives and
-false negatives.</p></li>
-<li><p><strong>Specificity:</strong> The proportion of actual negative
-cases correctly identified as negative (True Negatives / (True Negatives
-+ False Positives)).</p></li>
-<li><p><strong>Precision (Positive Predictive Value):</strong> The
-proportion of positive predictions that are actually correct (True
-Positives / (True Positives + False Positives)).</p></li>
-<li><p><strong>F1 Score:</strong> The harmonic mean of Precision and
-Recall, providing a balanced measure that considers both false positives
-and false negatives.</p></li>
+false negatives.</li>
 </ul>
-<pre><code>## Accuracy: 0.8032787</code></pre>
+<pre class="r"><code># Extract sensitivity (Recall for the positive class)
+sensitivity &lt;- confMatrix$byClass[&#39;Sensitivity&#39;]
+cat(&quot;Sensitivity (Recall):&quot;, sensitivity, &quot;\n&quot;)</code></pre>
 <pre><code>## Sensitivity (Recall): 0.7222222</code></pre>
+<ul>
+<li><strong>Specificity:</strong> The proportion of actual negative
+cases correctly identified as negative (True Negatives / (True Negatives
++ False Positives)).</li>
+</ul>
+<pre class="r"><code># Extract specificity (Recall for the negative class)
+specificity &lt;- confMatrix$byClass[&#39;Specificity&#39;]
+cat(&quot;Specificity:&quot;, specificity, &quot;\n&quot;)</code></pre>
 <pre><code>## Specificity: 0.8676471</code></pre>
+<ul>
+<li><strong>Precision (Positive Predictive Value):</strong> The
+proportion of positive predictions that are actually correct (True
+Positives / (True Positives + False Positives)).</li>
+</ul>
+<pre class="r"><code># Extract Precision (Positive Predictive Value)
+precision &lt;- confMatrix$byClass[&#39;Precision&#39;]
+cat(&quot;Precision:&quot;, precision, &quot;\n&quot;)</code></pre>
 <pre><code>## Precision: 0.8125</code></pre>
+<ul>
+<li><strong>F1 Score:</strong> The harmonic mean of Precision and
+Recall, providing a balanced measure that considers both false positives
+and false negatives.</li>
+</ul>
+<pre class="r"><code># Extract F1 Score
+f1_score &lt;- confMatrix$byClass[&#39;F1&#39;]
+cat(&quot;F1 Score:&quot;, f1_score, &quot;\n&quot;)</code></pre>
 <pre><code>## F1 Score: 0.7647059</code></pre>
 <p><br></p>
 </div>
