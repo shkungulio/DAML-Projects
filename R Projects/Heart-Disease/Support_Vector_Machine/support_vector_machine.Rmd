@@ -4,18 +4,53 @@ author: "by Seif Kungulio"
 date: "2025-04-04"
 output:
   html_document:
+    code_folding: hide
     theme: cosmo
+    highlight: zenburn
     toc: true
-    toc_title: "Table of Contents"
+    toc_depth: 4
     toc_float:
       collapsed: true
       smooth_scroll: false
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+# Install necessary packages if not installed
+if (!requireNamespace("RCurl", quietly = TRUE)) {
+  install.packages("RCurl")
+}
+if (!requireNamespace("patchwork", quietly = TRUE)) {
+  install.packages("patchwork")
+}
+if (!requireNamespace("corrplot", quietly = TRUE)) {
+  install.packages("corrplot")
+}
+if (!requireNamespace("tidyverse", quietly = TRUE)) {
+  install.packages("tidyverse")
+}
+if (!requireNamespace("GGally", quietly = TRUE)) {
+  install.packages("GGally")
+}
+if (!requireNamespace("e1071", quietly = TRUE)) {
+  install.packages("e1071")
+}
+if (!requireNamespace("caret", quietly = TRUE)) {
+  install.packages("caret")
+}
+
+# Load necessary libraries
+library(RCurl)
+library(ggplot2)
+library(patchwork)
+library(corrplot)
+library(dplyr)
+library(GGally)
+library(e1071)
+library(caret)
 ```
-<hr style="height:5px; border:none; color:red; background-color:red;" /><br>
+<hr style="height:5px; border:none; color:red; background-color:red;" />
 
 
 ## **Background & Introduction**
@@ -96,44 +131,6 @@ The dataset contains 14 key attributes that are either numerical or categorical.
 <hr style="height:2px; border:none; color:green; background-color:green;" />
 
 ### **Data Loading**
-Install necessary packages if they are not already installed.
-```{r}
-# For data retrieval from url
-if (!requireNamespace("RCurl", quietly = TRUE)) {
-  install.packages("RCurl")
-}
-
-# For tasks involving data manipulation
-if (!requireNamespace("dplyr", quietly = TRUE)) {
-  install.packages("dplyr")
-}
-
-# For creating visualizations
-if (!requireNamespace("ggplot2", quietly = TRUE)) {
-  install.packages("ggplot2")
-}
-
-# For arranging multiple ggplot2 plots in a single canvas.
-if (!requireNamespace("patchwork", quietly = TRUE)) {
-  install.packages("patchwork")
-}
-
-# for displaying correlation matrices
-if (!requireNamespace("corrplot", quietly = TRUE)) {
-  install.packages("corrplot")
-}
-```
-
-Load the required libraries
-```{r}
-library(RCurl)
-library(ggplot2)
-library(patchwork)
-library(corrplot)
-library(dplyr)
-library(GGally)
-```
-
 Load the dataset from UCI website using RCurl library
 ```{r}
 # Create url object to retrieve the dataset from UCI Machine Learning Repository
@@ -208,12 +205,12 @@ Convert categorical attributes to factors
 categorical_columns <- list(
   sex = list(levels = c(0, 1), labels = c("Female", "Male")),
   cp = list(levels = c(1, 2, 3, 4), labels = c("Typical Angina", "Atypical Angina", "Non-Angina", "Asymptomatic")),
-  fbs = list(levels = c(0, 1), labels = c("False", "True")),
+  fbs = list(levels = c(0, 1), labels = c("No", "Yes")),
   restecg = list(levels = c(0, 1, 2), labels = c("Normal", "Wave-abnormality", "Probable")),
   exang = list(levels = c(0, 1), labels = c("No", "Yes")),
   slope = list(levels = c(1, 2, 3), labels = c("Upsloping", "Flat", "Downsloping")),
   thal = list(levels = c(3, 6, 7), labels = c("Normal", "Fixed Defect", "Reversible")),
-  target = list(levels = c(1, 0), labels = c("Yes", "No"))
+  target = list(levels = c(1, 0), labels = c("Heart Disease Present", "No Heart Disease"))
 )
 
 # Apply the factor transformation using a loop
@@ -227,9 +224,42 @@ for (col in names(categorical_columns)) {
 
 ### **EDA through Visualization**
 
-#### **a. Barplots**
+#### **a. Boxplots**
+Boxplot function
+```{r boxplot_function}
+HeartDiseaseBoxplot <- function(var1, var2) {
+  ggplot(Heart.df, aes(x = .data[[var1]],
+                       y = .data[[var2]],
+                       fill = .data[[var1]])) +
+    geom_boxplot() + theme_test() +
+    labs(title = paste("Boxplot of", var2, "by", var1),
+         x = var1, y = var2, fill = "Heart Disease")
+}
+```
 
-```{r bar_function, echo=FALSE}
+Create boxplots of continuous variables.  
+```{r, fig.width = 12, fig.height = 12}
+# Create the plots
+p1 <- HeartDiseaseBoxplot("target", "age")
+p2 <- HeartDiseaseBoxplot("target", "trestbps")
+p3 <- HeartDiseaseBoxplot("target", "chol")
+p4 <- HeartDiseaseBoxplot("target", "thalach")
+p5 <- HeartDiseaseBoxplot("target", "oldpeak")
+
+# Combine plot using patchwork
+(p1 | p2) /
+(p3 | p4) /
+(p5)
+```
+
+##### **Box Plots Interpretation and Analysis**
+
+
+<br>
+
+#### **b. Barplots**
+Barplot function
+```{r bar_function}
 HeartDiseaseBar <- function(var) {
   ggplot(Heart.df, aes(x = .data[[var]], fill = target)) +
     geom_bar(position = "dodge") + theme_test() +
@@ -265,9 +295,9 @@ g8 <- HeartDiseaseBar("thal")
 
 <br>
 
-#### **b. Histogram Distributions**
-
-```{r histogram_function, echo=FALSE}
+#### **c. Histogram Distributions**
+Histogram function
+```{r histogram_function}
 HeartDiseaseHist <- function(var1) {
   ggplot(Heart.df, aes(x = .data[[var1]], fill = target)) +
     geom_histogram(bins = 15) + theme_test() +
@@ -296,41 +326,9 @@ p5 <- HeartDiseaseHist("oldpeak")
 
 <br>
 
-#### **c. Boxplots**
-
-```{r boxplot_function, echo=FALSE}
-HeartDiseaseBoxplot <- function(var1, var2) {
-  ggplot(Heart.df, aes(x = .data[[var1]],
-                       y = .data[[var2]],
-                       fill = .data[[var1]])) +
-    geom_boxplot() + theme_test() +
-    labs(title = paste("Boxplot of", var2, "by", var1),
-         x = var1, y = var2, fill = "Heart Disease")
-}
-```
-
-Create boxplots of continuous variables.  
-```{r, fig.width = 12, fig.height = 12}
-# Create the plots
-p1 <- HeartDiseaseBoxplot("target", "age")
-p2 <- HeartDiseaseBoxplot("target", "trestbps")
-p3 <- HeartDiseaseBoxplot("target", "chol")
-p4 <- HeartDiseaseBoxplot("target", "thalach")
-p5 <- HeartDiseaseBoxplot("target", "oldpeak")
-
-# Combine plot using patchwork
-(p1 | p2) /
-(p3 | p4) /
-(p5)
-```
-
-##### **Box Plots Interpretation and Analysis**
-
-
-<br>
-
 #### **d. Scaterplots**
-```{r scatterfunction, echo=FALSE}
+Scatter plot function
+```{r scatterfunction}
 HeartDiseaseScatter <- function(point1, point2){
   ggplot(Heart.df, aes(x = .data[[point1]],
                        y = .data[[point2]],
@@ -367,7 +365,7 @@ p7 <- HeartDiseaseScatter("thalach", "oldpeak")
 
 #### **e. Pair Plots**
 Pairwise relationship between multiple continuous variables
-```{r pair_plots, fig.width = 12, fig.height = 6}
+```{r pair_plots, fig.width = 12, fig.height = 6, message=FALSE}
 # Create a colored pair plot for selected variables
 ggpairs(Heart.df[, c("age", "trestbps", "chol", 
                      "thalach", "oldpeak", "target")], 
@@ -399,7 +397,44 @@ corrplot(correlation_matrix, method = "circle",
 
 ## **Modeling**
 <hr style="height:2px; border:none; color:green; background-color:green;" />
+```{r}
+# Set seed for reproducibility
+set.seed(1)
 
+# Split the data into a training set (2/3) and test set (1/3)
+trainIdx = sample(1:nrow(Heart.df), size = 2/3 * nrow(Heart.df))
+
+# Create a training dataset out of "Heart.df"
+trainData = Heart.df[trainIdx, ]
+
+# Create a testing dataset from the remaining dataset of "Heart.df"
+testData  <- Heart.df[-trainIdx, ]
+
+# Check the dimension of training dataset
+dim(trainData)
+
+# Check the dimension of testing dataset
+dim(testData)
+```
+
+Build a support vector machine model with radial kernel and gamma = 10 and cost = 100.
+```{r}
+svm.model <- svm(target ~ ., data = trainData, kernel = "radial", gamma = 10, cost = 100)
+summary(svm.model)
+```
+
+Perform a grid search to find the best model with potential cost: 1, 10, 50, 100 and potential gamma: 1, 3, and 5 and using radial kernel and training dataset.
+```{r}
+tuned.results <- tune(svm, target ~ ., data = trainData, kernel = "radial", 
+                     ranges = list(cost = c(1, 10, 50, 100), gamma = c(1, 3, 5)))
+summary(tuned.results)
+```
+
+Determine best model parameters and print out the model results.
+```{r}
+best_tuned.model <- tuned.results$best.model
+summary(best_tuned.model)
+```
 
 
 <br>
@@ -408,8 +443,23 @@ corrplot(correlation_matrix, method = "circle",
 ## **Evaluation**
 <hr style="height:2px; border:none; color:green; background-color:green;" />
 
+Forecast `target` using the test dataset and the best model
+```{r}
+predictions <- predict(best_tuned.model, newdata = testData)
+summary(predictions)
+```
 
+Get the true observations of `target` in the test dataset
+```{r}
+actuals <- testData$target
+summary(actuals)
+```
 
+Compute the test error by constructing the confusion matrix
+```{r}
+conf.matrix <- confusionMatrix(predictions, actuals)
+print(conf.matrix)
+```
 
 
 <br>

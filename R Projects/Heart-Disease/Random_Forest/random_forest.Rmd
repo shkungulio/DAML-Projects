@@ -1,22 +1,23 @@
 ---
-title: "Predicting Heart Disease Risks"
+title: "**Predicting Heart Disease Risks**"
 subtitle: "Using Random Forest Algorithm"
 author: "by Seif Kungulio"
-#date: "2025-04-04"
+date: "`r Sys.Date()`"
 output:
-  html_document:
-    theme: cosmo
-    toc: true
-    toc_title: "Table of Contents"
-    toc_float:
-      collapsed: true
-      smooth_scroll: no
+  rmdformats::readthedown
+  # html_document:
+  #   theme: cosmo
+  #   toc: true
+  #    toc_title: "Table of Contents"
+  #    toc_float:
+  #      collapsed: true
+  #      smooth_scroll: no
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-<hr style="height:5px; border:none; color:red; background-color:red;" /><br>
+<hr style="height:5px; border:none; color:#006000; background-color:#006000;" /><br>
 
 
 ## **Background & Introduction**

@@ -1,0 +1,32 @@
+---
+title: "Web Scrapping"
+author: "by Seif Kungulio"
+#date: "2025-04-10"
+output: 
+    prettydoc::html_pretty:
+    theme: cayman
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+#install.packages("prettydoc")
+#library(prettydoc)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Web Scrapping
+
+```{r, message=FALSE}
+#install.packages("ralger")
+#install.packages("rvest")
+
+
+url = "https://quran.com/1"
+
+library(ralger)
+library(rvest)
+
+
+
+
+```
