@@ -1,0 +1,280 @@
+---
+title: "Support Vector Machine in R"
+subtitle: "Using Iris Dataset"
+author: "Seif Kungulio"
+date: "04/18/2025"
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE)
+library(knitr)
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#1c5253",
+  header_font_google = google_font("Lato"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Code")
+)
+```
+
+## Introduction
+
+This report demonstrates how to implement a **Support Vector Machine (SVM)** model in R using the iris dataset. We'll go through data loading, preprocessing, model training, evaluation, and tuning.
+
+<br>
+
+--
+
+SVM is a supervised machine learning algorithm used for classification and regression. It works by finding the best hyperplane to separate different classes in the feature space.
+
+---
+
+## Install & Load Required Packages
+
+We use the **e1071** package in R, which includes the **svm()** function to build and tune SVM models.
+
+<br>
+
+**Install necessary libraries if not already installed**
+```{r}
+if (!require("e1071")) {
+  install.packages("e1071", dependencies = TRUE)
+}
+```
+
+<br>
+
+--
+
+**Load e1071 library**
+```{r, message=FALSE, warning=FALSE}
+library(e1071)
+```
+
+---
+
+## Load & Explore the Dataset
+
+**Load built-in `iris` dataset**
+```{r iris}
+data(iris)
+```
+
+The **iris** dataset contains **`r nrow(iris)`** flower observations with 4 numeric features and one categorical target (Species).
+
+<br>
+
+--
+
+**Display the first six rows of the dataset**
+```{r}
+head(iris)
+```
+
+---
+
+**Display the statistical summary of the dataset**
+```{r}
+summary(iris)
+```
+
+---
+
+## Data Splitting
+
+Split the data: **70%** for training, **30%** for testing. This allows evaluation of model performance on unseen data.
+
+**Set seed for reproducibility**
+```{r splitting}
+set.seed(123)
+```
+<br>
+
+--
+
+**Split 70% for training and 30% for testing**
+```{r}
+index <- sample(1:nrow(iris), 0.7 * nrow(iris))
+train_data <- iris[index, ]
+test_data <- iris[-index, ]
+
+```
+
+---
+
+**Display the training dataset dimensions**
+```{r dimensions}
+dim(train_data)
+```
+
+<br>
+
+--
+
+**Display the testing dataset dimensions**
+```{r}
+dim(test_data)
+```
+
+---
+## Train **`SVM`** Model
+
+We train an SVM model using a **`linear`** kernel. The **`Species ~ .`** formula means we use all other variables to predict the species.
+
+```{r}
+model <- svm(Species ~ ., data = train_data, kernel = "linear")
+```
+
+
+---
+
+**Display the statistical summary of the SVM model**
+```{r}
+summary(model)
+```
+
+---
+
+## Make Predictions
+
+Use the trained model to predict flower species in the test dataset.
+
+**Make predictions**
+```{r}
+predictions <- predict(model, test_data)
+```
+
+<br>
+
+--
+
+**Display the first six predictions**
+```{r}
+head(predictions)
+```
+
+---
+
+## Evaluate Model Performance
+
+Confusion matrix helps us measure the model’s performance. We also calculate accuracy to evaluate correctness.
+
+```{r}
+conf_mat <- table(Predicted = predictions,
+                  Actual = test_data$Species)
+conf_mat
+```
+
+<br>
+
+--
+
+**Display the accuracy**
+```{r}
+accuracy <- sum(diag(conf_mat)) / sum(conf_mat)
+paste("Accuracy:", round(accuracy * 100, 2), "%")
+```
+
+---
+
+## Tune the Model
+
+Use **`cross-validation`** to find the best **`cost`** and **`gamma`** parameters for improved performance with a **`radial`** kernel.
+
+```{r}
+tuned_model <- tune(svm, Species ~ ., data = train_data,
+                    kernel = "radial",
+                    ranges = list(cost = c(0.1, 1, 10),
+                                  gamma = c(0.5, 1, 2)))
+```
+
+---
+
+**Display the statistical summary of the tuned model**
+
+```{r}
+summary(tuned_model)
+```
+
+---
+
+## Predict Using Tuned Model
+
+Evaluate performance again after tuning. The new model should be more accurate or generalizable.
+
+**Select the best model from the tuned model**
+```{r}
+best_model <- tuned_model$best.model
+```
+
+<br>
+
+--
+
+**Make predictions**
+```{r}
+tuned_predictions <- predict(best_model, test_data)
+```
+
+---
+
+**Create Confusion Matrix table**
+```{r}
+tuned_conf_matrix <- table(Predicted = tuned_predictions, 
+                           Actual = test_data$Species)
+```
+
+--
+
+**Calculate and display the Accuracy**
+```{r}
+tuned_accuracy <- sum(diag(tuned_conf_matrix)) / 
+  sum(tuned_conf_matrix)
+paste("Tuned Accuracy:", round(tuned_accuracy * 100, 2), "%")
+```
+
+--
+
+**Accuracy Comparison**
+
+```{r}
+accuracy_data <- data.frame(
+  Model = c("Original", "Tuned"),
+  Accuracy = c(round(accuracy,4), round(tuned_accuracy,4))
+)
+kable(accuracy_data)
+```
+
+---
+
+## Key Parameters Explained
+
+<br>
+
+Tuning these parameters can greatly improve model performance.
+
+* **kernel** – function that transforms data (e.g., "linear", "radial")
+
+* **cost** – controls margin width and misclassification penalty
+
+* **gamma** – defines influence of a data point (used in non-linear kernels)
+
+---
+
+## Summary
+
+<br>
+
+This workflow applies to both small datasets like iris and real-world datasets, such as those used in healthcare analytics.
+
+* Loaded data and trained an SVM model
+
+* Evaluated accuracy and confusion matrix
+
+* Tuned hyperparameters for improved performance
