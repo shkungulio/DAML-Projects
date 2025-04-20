@@ -1,0 +1,189 @@
+---
+title: "Data-Driven Risk Stratification for Heart Disease Using ML Algorithms"
+author: "Seif Kungulio"
+output:
+  flexdashboard::flex_dashboard:
+    #vertical_layout: scroll
+    storyboard: true
+    social: menu
+    #source: embed
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(flexdashboard)
+```
+
+
+### **Business Understanding** <br> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+**Problem Statement**
+
+*Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante.*
+
+
+### **Data Understanding** <br> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+**Data Dictionary**
+
+Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+**Data Source**
+
+* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. 
+* Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. 
+* Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. 
+
+
+### **Data Preparation**
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+
+### **Modeling**
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+**Logistic Regression**
+
+A linear model used for binary classification (predicting one of two outcomes). It uses a sigmoid function to predict the probability of a data point belonging to a specific class.
+
+
+### **Modeling**
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+**Support Vector Machine**
+
+A powerful algorithm that finds an optimal hyperplane to separate data into different classes. It can handle both linear and non-linear classification problems using kernel functions.
+
+
+### **Modeling**
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+**Naive Bayesian**
+
+A probabilistic classifier based on Bayes' theorem, assuming independence between features. It calculates the probability of a data point belonging to a class based on its feature values.
+
+
+### **Modeling**
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+**k-Nearest Neighbor**
+
+A non-parametric algorithm that classifies data points based on the majority class of their nearest neighbors. It stores all data points and uses distance metrics to find the k closest neighbors for classification.
+
+
+### **Modeling**
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+**Decision Tree**
+
+A hierarchical model that uses a tree-like structure to represent decision rules for classifying data. It recursively divides data based on feature values to create branches that lead to different classes.
+
+
+### **Modeling**
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+**Random Forest**
+
+An ensemble method that combines multiple decision trees to improve prediction accuracy. It uses bagging (bootstrapping) and random feature selection to create diverse decision trees.
+
+
+### **Evaluation**
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+
+### **Tune Modeling**
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+
+### **Re-Evaluation**
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+
+### **Deployment**
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+
+### **Conclusion**
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+
+Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+***
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
