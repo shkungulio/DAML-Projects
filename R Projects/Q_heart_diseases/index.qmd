@@ -1,0 +1,68 @@
+---
+title: "Home"
+format: 
+  dashboard:
+    theme: Cyborg
+    orientation: columns
+    nav-buttons: 
+      - icon: github
+        href: https://github.com/shkungulio
+        aria-label: GitHub
+      - icon: linkedin
+        href: https://linkedin.com/in/seif-kungulio
+        aria-label: LinkedIn
+      - icon: youtube
+        href: https://shkungulio.com
+        aria-label: SHKungulio
+---
+
+Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+
+## Column 1 {width="30%"}
+
+### Row - Calculation 1{height="20%"}
+```{r}
+#| title: Calculation
+1 + 1
+6 / 3
+7 * 6
+
+```
+
+### Row - Calcuation 2 {height="80%"}
+```{r}
+#| title: Calculation
+1 + 1
+6 / 3
+7 * 6
+
+```
+
+## Column 1 {width="70%"}
+
+### {height="60%"}
+
+```{r}
+#| title: Mtcars Dataset
+#data(mtcars)
+
+plot(mtcars)
+```
+
+### {height="40%"}
+```{r}
+#| title: Mtcars Dataset
+data(mtcars)
+
+mtcars
+```
+
+```{r}
+#| title: Mtcars Dataset
+data(mtcars)
+
+mtcars
+```
