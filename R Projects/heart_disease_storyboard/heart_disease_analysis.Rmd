@@ -1,5 +1,5 @@
 ---
-title: "Data-Driven Risk Stratification for Heart Disease Using ML Algorithms"
+title: "Risk Stratification for Heart Disease Using ML Algorithms"
 author: "Seif Kungulio"
 output:
   flexdashboard::flex_dashboard:
