@@ -1,6 +1,6 @@
 /* Base text */
 body {
-  font-size: 16px;  /* Adjust base font size */
+  font-size: 12px;  /* Adjust base font size */
 }
 
 /* Headings */
@@ -11,7 +11,7 @@ h2, .section.level2 {
   font-size: 24px;
 }
 h3, .section.level3 {
-  font-size: 20px;
+  font-size: 22px;
 }
 
 /* Code chunks */

@@ -1,12 +1,5 @@
 ---
-<<<<<<< HEAD
-title: "Risk Stratification for Heart Disease Using ML Algorithms"
-author: "Seif Kungulio"
-=======
 title: "Forecasting Heart Disease Risks Using ML Algorithms"
-#author: "Seif Kungulio"
-#runtime: shiny
->>>>>>> c1c3a06b3e187a7a4e066bf1960e7a4c991c92bb
 output:
   flexdashboard::flex_dashboard:
     orientation: rows
@@ -16,12 +9,11 @@ output:
     source: embed
     theme:
       version: 4
-      #bg: "#101010"
-      bg: "#333333"
+      bg: "#101010"
       fg: "#FDF7F7" 
       primary: "#FF6000"
       #navbar-bg: "#3ADAC6"
-      navbar-bg: "#FFFFFF"
+      #navbar-bg: "#FFFFFF"
       base_font: 
         google: Montserrat
       heading_font:
@@ -29,15 +21,60 @@ output:
       code_font:
         google: 
           # arguments to sass::font_google() 
-          family: 'Fira Mono'
+          family: 'Fira Code'
           local: false
 ---
 
-```{r setup, include=FALSE, context = "server"}
+```{r setup, include=FALSE, context = "server", warning=FALSE, message=FALSE}
 thematic::thematic_rmd(font = "auto")
 #bslib::bs_themer()
 knitr::opts_chunk$set(echo = TRUE)
+
+# Install necessary packages if they are not already installed.
+if (!requireNamespace("RCurl", quietly = TRUE)) {
+  install.packages("RCurl")
+}
+if (!requireNamespace("tidyverse", quietly = TRUE)) {
+  install.packages("tidyverse") # For tasks involving data manipulation
+}
+if (!requireNamespace("patchwork", quietly = TRUE)) {
+  install.packages("patchwork") 
+}
+if (!requireNamespace("corrplot", quietly = TRUE)) {
+  install.packages("corrplot") 
+}
+if (!requireNamespace("bestglm", quietly = TRUE)) {
+  install.packages("bestglm")
+}
+if (!requireNamespace("MASS", quietly = TRUE)) {
+  install.packages("MASS")
+}
+if (!requireNamespace("caret", quietly = TRUE)) {
+  install.packages("caret")
+}
+if (!requireNamespace("gam", quietly = TRUE)) {
+  install.packages("gam")
+}
+if (!requireNamespace("randomForest", quietly = TRUE)) {
+  install.packages("randomForest")
+}
+if (!requireNamespace("rpart", quietly = TRUE)) {
+  install.packages("rpart")
+}
+
+# Load the required libraries
 library(flexdashboard)
+library(RCurl) # For data retrieval from url
+library(tidyverse)
+library(patchwork) # For arranging multiple ggplot2 plots in a single canvas.
+library(corrplot) # for displaying correlation matrices
+library(GGally)
+library(bestglm)
+library(MASS)
+library(caret)
+library(gam)
+library(randomForest)
+library(rpart)
 ```
 
 
@@ -73,12 +110,6 @@ The objective of this study is to develop and evaluate machine learning classifi
 
 By addressing this problem, the project seeks to demonstrate the potential of data-driven approaches in augmenting traditional diagnostic methods and contributing to personalized healthcare.
 
-***
-
-**Problem Statement**
-
-*Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante.*
-
 
 ### **Data Understanding**
 
@@ -110,10 +141,6 @@ The dataset contains various features related to patients' health and demographi
 
 **Data Source**
 
-* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. 
-* Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. 
-* Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. 
-
 The dataset contains 14 key attributes that are either numerical or categorical. These attributes are:
 
   1. **age:** Age of the patient (numeric)
@@ -138,42 +165,14 @@ The dataset contains 14 key attributes that are either numerical or categorical.
 
 **Data Loading**
 
-Install necessary packages if they are not already installed.
+
 ```{r}
-# For data retrieval from url
-if (!requireNamespace("RCurl", quietly = TRUE)) {
-  install.packages("RCurl")
-}
 
-# For tasks involving data manipulation
-if (!requireNamespace("dplyr", quietly = TRUE)) {
-  install.packages("dplyr")
-}
-
-# For creating visualizations
-if (!requireNamespace("ggplot2", quietly = TRUE)) {
-  install.packages("ggplot2")
-}
-
-# For arranging multiple ggplot2 plots in a single canvas.
-if (!requireNamespace("patchwork", quietly = TRUE)) {
-  install.packages("patchwork")
-}
-
-# for displaying correlation matrices
-if (!requireNamespace("corrplot", quietly = TRUE)) {
-  install.packages("corrplot")
-}
 ```
 
-Load the required libraries
+
 ```{r}
-library(RCurl)
-library(ggplot2)
-library(patchwork)
-library(corrplot)
-library(dplyr)
-library(GGally)
+
 ```
 
 Load the dataset from UCI website using RCurl library
@@ -280,27 +279,20 @@ HeartDiseaseBar <- function(var) {
 ```
 
 Create the distribution of heart disease by categorical variables
-```{r, echo=FALSE}
+```{r, fig.width = 6, fig.height = 12, echo=FALSE}
 # Create the plots
-g1 <- ggplot(Heart.df, aes(x=target, fill=target))+
+ggplot(Heart.df, aes(x=target, fill=target))+
   geom_bar() + theme_test() +
   ggtitle("Distribution of Heart Disease") +
   labs(x = "Heart Disease", fill = "Heart Disease")
-g2 <- HeartDiseaseBar("sex")
-g3 <- HeartDiseaseBar("cp")
-g4 <- HeartDiseaseBar("fbs")
-g5 <- HeartDiseaseBar("restecg")
-g6 <- HeartDiseaseBar("exang")
-g7 <- HeartDiseaseBar("slope")
-g8 <- HeartDiseaseBar("thal")
-```
 
-### Combine plot using patchwork
-```{r, fig.width = 12, fig.height = 16, echo=FALSE}
-(g1 | g2) /
-(g3 | g4) /
-(g5 | g6) /
-(g7 | g8)
+HeartDiseaseBar("sex")
+HeartDiseaseBar("cp")
+HeartDiseaseBar("fbs")
+HeartDiseaseBar("restecg")
+HeartDiseaseBar("exang")
+HeartDiseaseBar("slope")
+HeartDiseaseBar("thal")
 ```
 
 ***
@@ -320,18 +312,13 @@ HeartDiseaseHist <- function(var1) {
 ```
 
 Create histogram distributions of continuous variables.  
-```{r, fig.width = 12, fig.height = 12}
+```{r, fig.width = 6, fig.height = 12}
 # Create the plots
-p1 <- HeartDiseaseHist("age")
-p2 <- HeartDiseaseHist("trestbps")
-p3 <- HeartDiseaseHist("chol")
-p4 <- HeartDiseaseHist("thalach")
-p5 <- HeartDiseaseHist("oldpeak")
-
-# Combine plot using patchwork
-(p1) /
-(p2 | p3) /
-(p4 | p5)
+HeartDiseaseHist("age")
+HeartDiseaseHist("trestbps")
+HeartDiseaseHist("chol")
+HeartDiseaseHist("thalach")
+HeartDiseaseHist("oldpeak")
 ```
 
 **Histogram Plots Interpretation and Analysis**
@@ -351,18 +338,12 @@ HeartDiseaseBoxplot <- function(var1, var2) {
 ```
 
 Create boxplots of continuous variables.  
-```{r, fig.width = 12, fig.height = 12}
-# Create the plots
-p1 <- HeartDiseaseBoxplot("target", "age")
-p2 <- HeartDiseaseBoxplot("target", "trestbps")
-p3 <- HeartDiseaseBoxplot("target", "chol")
-p4 <- HeartDiseaseBoxplot("target", "thalach")
-p5 <- HeartDiseaseBoxplot("target", "oldpeak")
-
-# Combine plot using patchwork
-(p1 | p2) /
-(p3 | p4) /
-(p5)
+```{r, fig.width = 6, fig.height = 12}
+HeartDiseaseBoxplot("target", "age")
+HeartDiseaseBoxplot("target", "trestbps")
+HeartDiseaseBoxplot("target", "chol")
+HeartDiseaseBoxplot("target", "thalach")
+HeartDiseaseBoxplot("target", "oldpeak")
 ```
 
 **Box Plots Interpretation and Analysis**
@@ -384,20 +365,13 @@ HeartDiseaseScatter <- function(point1, point2){
 
 Create scatterplots of continuous variables. 
 ```{r scatterplot, fig.width = 12, fig.height = 16}
-# Create the plots
-p1 <- HeartDiseaseScatter("age", "oldpeak")
-p2 <- HeartDiseaseScatter("age", "chol")
-p3 <- HeartDiseaseScatter("age", "trestbps")
-p4 <- HeartDiseaseScatter("age", "thalach")
-p5 <- HeartDiseaseScatter("chol", "thalach")
-p6 <- HeartDiseaseScatter("trestbps", "chol")
-p7 <- HeartDiseaseScatter("thalach", "oldpeak")
-
-# Combine plot using patchwork
-(p1 | p2) /
-(p3 | p4) /
-(p5 | p6) /
-(p7)
+HeartDiseaseScatter("age", "oldpeak")
+HeartDiseaseScatter("age", "chol")
+HeartDiseaseScatter("age", "trestbps")
+HeartDiseaseScatter("age", "thalach")
+HeartDiseaseScatter("chol", "thalach")
+HeartDiseaseScatter("trestbps", "chol")
+HeartDiseaseScatter("thalach", "oldpeak")
 ```
 
 **Scatter Plots Interpretation and Analysis**
@@ -420,20 +394,18 @@ ggpairs(Heart.df[, c("age", "trestbps", "chol",
 
 Correlation matrix for continuous variables
 ```{r correlation_matrix}
-# Selecting only continuous variables
-continuous_vars <- c("age", "trestbps", "chol", "thalach", "oldpeak")
-continuous_data <- Heart.df %>% select(all_of(continuous_vars))
-
-# Calculating correlation matrix
-correlation_matrix <- cor(continuous_data)
+# # Selecting only continuous variables
+# continuous_vars <- c("age", "trestbps", "chol", "thalach", "oldpeak")
+# continuous_data <- Heart.df %>% select(all_of(continuous_vars))
+# 
+# # Calculating correlation matrix
+# correlation_matrix <- cor(continuous_data)
 ```
 
-***
-
 ```{r}
-# Plotting the correlation matrix
-corrplot(correlation_matrix, method = "circle",
-         type = "lower", tl.col = "black")
+# # Plotting the correlation matrix
+# corrplot(correlation_matrix, method = "circle",
+#          type = "lower", tl.col = "black")
 ```
 
 
