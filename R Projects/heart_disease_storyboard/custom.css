@@ -1,0 +1,20 @@
+/* Base text */
+body {
+  font-size: 16px;  /* Adjust base font size */
+}
+
+/* Headings */
+h1, .section.level1 {
+  font-size: 28px;
+}
+h2, .section.level2 {
+  font-size: 24px;
+}
+h3, .section.level3 {
+  font-size: 20px;
+}
+
+/* Code chunks */
+pre, code {
+  font-size: 14px;
+}

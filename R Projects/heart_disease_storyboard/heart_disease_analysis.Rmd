@@ -1,25 +1,77 @@
 ---
+<<<<<<< HEAD
 title: "Risk Stratification for Heart Disease Using ML Algorithms"
 author: "Seif Kungulio"
+=======
+title: "Forecasting Heart Disease Risks Using ML Algorithms"
+#author: "Seif Kungulio"
+#runtime: shiny
+>>>>>>> c1c3a06b3e187a7a4e066bf1960e7a4c991c92bb
 output:
   flexdashboard::flex_dashboard:
-    #vertical_layout: scroll
+    orientation: rows
+    css: custom.css
     storyboard: true
     social: menu
-    #source: embed
+    source: embed
+    theme:
+      version: 4
+      #bg: "#101010"
+      bg: "#333333"
+      fg: "#FDF7F7" 
+      primary: "#FF6000"
+      #navbar-bg: "#3ADAC6"
+      navbar-bg: "#FFFFFF"
+      base_font: 
+        google: Montserrat
+      heading_font:
+        google: Lato
+      code_font:
+        google: 
+          # arguments to sass::font_google() 
+          family: 'Fira Mono'
+          local: false
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, context = "server"}
+thematic::thematic_rmd(font = "auto")
+#bslib::bs_themer()
 knitr::opts_chunk$set(echo = TRUE)
 library(flexdashboard)
 ```
 
 
-### **Business Understanding** <br> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+### **Introduction**
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+Cardiovascular diseases (CVDs) remain a leading cause of death globally, posing a significant challenge to healthcare systems and affecting the quality of life for millions. Early and accurate detection of heart disease is critical for timely intervention, improved patient outcomes, and reduced medical costs. In recent years, the increasing availability of healthcare data has opened new opportunities to apply machine learning techniques to support clinical decision-making and enhance diagnostic accuracy.
 
-Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+
+The Heart Disease dataset from the UCI Machine Learning Repository offers a valuable collection of clinical and demographic data, including variables such as age, sex, resting blood pressure, cholesterol levels, and electrocardiographic results. These features serve as potential indicators of heart disease and provide a foundation for developing predictive models.
+
+
+This project seeks to utilize supervised machine learning classification algorithms to predict the likelihood of heart disease in patients based on these clinical attributes. The primary objective is to build models that are not only accurate and robust but also interpretable and practical in a healthcare context.
+
+
+To ensure a structured and effective approach, this project will follow the **CRISP-DM** (Cross-Industry Standard Process for Data Mining) methodology. This includes business understanding, data understanding, data preparation, modeling, evaluation, and deployment phases—guiding the end-to-end data science process and aligning technical work with real-world medical decision-making needs.
+
+
+### **Business Understanding**
+
+**Problem Statement**
+
+The objective of this study is to develop and evaluate machine learning classification models using the UCI Heart Disease dataset to predict the presence of heart disease in patients. Specifically, the project will:
+
+* Preprocess and explore the dataset to understand underlying patterns and relationships.
+
+* Apply and compare the performance of various classification algorithms (e.g., Logistic Regression, Decision Trees, Random Forest, Support Vector Machines, etc.).
+
+* Evaluate model performance using appropriate metrics such as accuracy, precision, recall, F1-score, and ROC-AUC.
+
+* Identify the most significant features contributing to the prediction of heart disease.
+
+* Provide insights into how such predictive models can support clinical decision-making and improve early detection.
+
+By addressing this problem, the project seeks to demonstrate the potential of data-driven approaches in augmenting traditional diagnostic methods and contributing to personalized healthcare.
 
 ***
 
@@ -28,13 +80,31 @@ Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accu
 *Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante.*
 
 
-### **Data Understanding** <br> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+### **Data Understanding**
+
+The dataset contains various features related to patients' health and demographic information. We will explore the dataset to understand its structure and relationships between variables.
 
 **Data Dictionary**
 
-Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+|**Attribute**| **Type** | **Description** | **Contraints/Rules** |
+|:--------------|:---------|:----------------|:---------------------|
+| **age** | Numerical | The age of the patient in years | Range: 29 - 77 (Based on the dataset statistics) |
+| **sex** | Categorical | The gender of the patient | Values: 1 = Male, 0 = Female |
+| **cp** | Categorical | Type of chest pain experienced by the patient | Values: 1 = Typical angina, 2 = Atypical angina, 3 = Non-anginal pain, 4 = Asymptomatic |
+| **trestbps** | Numerical | Resting blood pressure of the patient, measured in mmHg | Range: Typically, between 94 and 200 mmHg |
+| **chol** | Numerical | Serum cholesterol level in mg/dl | Range: Typically, between 126 and 564 mg/dl |
+| **fbs** | Categorical | Fasting blood sugar level > 120 mg/dl | Values: 1 = True, 0 = False |
+| **restecg** | Categorical | Results of the patient’s resting electrocardiogram | Values: 0 = Normal, 1 = ST-T wave abnormality, 2 = Probable or definite left ventricular hypertrophy |
+| **thalach** | Numerical | Maximum heart rate achieved during a stress test | Range: Typically, between 71 and 202 bpm |
+| **exang** | Categorical | Whether the patient experiences exercise-induced angina | Values: 1 = Yes, 0 = No |
+| **oldpeak** | Numerical | ST depression induced by exercise relative to rest (an ECG measure) | Range: 0.0 to 6.2 (higher values indicate more severe abnormalities) |
+| **slope** | Categorical | Slope of the peak exercise ST segment | Values: 1 = Upsloping, 2 = Flat, 3 = Downsloping |
+| **ca** | Numerical | Number of major vessels colored by fluoroscopy | Range: 0-3 |
+| **thal** | Categorical | Blood disorder variable related to thalassemia | Values: 3 = Normal, 6 = Fixed defect, 7 = Reversible defect |
+| **target** | Categorical | Diagnosis of heart disease | Values: 0 = No heart disease, 1 = Presence of heart disease |
+|   |   |   |   |
+<br>
 
-Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
 
 ***
 
@@ -44,19 +114,330 @@ Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accu
 * Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. 
 * Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. 
 
+The dataset contains 14 key attributes that are either numerical or categorical. These attributes are:
+
+  1. **age:** Age of the patient (numeric)
+  2. **sex:** Gender of the patient (1 = male, 0 = female)
+  3. **cp:** Chest pain type (categorical: 1-4)
+  4. **trestbps:** Resting blood pressure (numeric)
+  5. **chol:** Serum cholesterol (numeric)
+  6. **fbs:** Fasting blood sugar (1 = true, 0 = false)
+  7. **restecg:** Resting electrocardiographic results (categorical)
+  8. **thalach:** Maximum heart rate achieved (numeric)
+  9. **exang:** Exercise-induced angina (1 = yes, 0 = no)
+  10. **oldpeak:** ST depression induced by exercise (numeric)
+  11. **slope:** The slope of the peak exercise ST segment (categorical)
+  12. **ca:** Number of major vessels (0-3, numeric)
+  13. **thal:** Thalassemia (categorical: 1 = normal, 2 = fixed defect, 3 = reversible defect)
+  14. **target:** Heart disease (1 = disease, 0 = no disease)  
+  
+<br>
+
 
 ### **Data Preparation**
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+**Data Loading**
 
-Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
+Install necessary packages if they are not already installed.
+```{r}
+# For data retrieval from url
+if (!requireNamespace("RCurl", quietly = TRUE)) {
+  install.packages("RCurl")
+}
+
+# For tasks involving data manipulation
+if (!requireNamespace("dplyr", quietly = TRUE)) {
+  install.packages("dplyr")
+}
+
+# For creating visualizations
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2")
+}
+
+# For arranging multiple ggplot2 plots in a single canvas.
+if (!requireNamespace("patchwork", quietly = TRUE)) {
+  install.packages("patchwork")
+}
+
+# for displaying correlation matrices
+if (!requireNamespace("corrplot", quietly = TRUE)) {
+  install.packages("corrplot")
+}
+```
+
+Load the required libraries
+```{r}
+library(RCurl)
+library(ggplot2)
+library(patchwork)
+library(corrplot)
+library(dplyr)
+library(GGally)
+```
+
+Load the dataset from UCI website using RCurl library
+```{r}
+# Create url object to retrieve the dataset from UCI Machine Learning Repository
+url <- "https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data"
+
+# Read the dataset into a dataframe
+Heart.df <- read.csv(url(url), header = FALSE, na.strings = "?")
+```
+
+Display dimensions of the dataframe
+```{r}
+dim(Heart.df)
+```
+
+View the first six rows of the dataset
+```{r}
+head(Heart.df)
+```
+<br>
+
+**Data Preprocessing**
+
+Renaming the column names for clarity
+```{r}
+colnames(Heart.df) <- c("age", "sex", "cp", "trestbps", "chol", "fbs", "restecg", "thalach", "exang", "oldpeak", "slope", "ca", "thal", "target")
+```
+
+Display the structure of the dataframe
+```{r}
+str(Heart.df)
+```
+
+Display the statistical summary of the dataframe
+```{r}
+summary(Heart.df)
+```
+
+According to the Data Dictionary, the following attributes should be binary variables, `sex`, `fbs`, `exang`, and `target`. But, some shows to have values besides 0's and 1's.  
+Let's convert binary variables to (0, 1)
+```{r}
+Heart.df$sex <- ifelse(Heart.df$sex > 0, 1, 0)
+Heart.df$fbs <- ifelse(Heart.df$fbs > 0, 1, 0)
+Heart.df$exang <- ifelse(Heart.df$exang > 0, 1, 0)
+Heart.df$target <- ifelse(Heart.df$target > 0, 1, 0)
+```
+
+Check to see if there are missing values in the dataframe
+```{r}
+sapply(Heart.df, function(x) sum(is.na(x)))
+```
+
+From the summary and the table above, there are some missing values in `ca` and `thal` columns.  
+Let's handle the missing values using mean/mode imputation method
+```{r}
+# If missing values exist in 'ca' or 'thal', handle them using mean/mode imputation
+Heart.df$ca[is.na(Heart.df$ca)] <- median(Heart.df$ca, na.rm = TRUE)
+Heart.df$ca[Heart.df$ca == "?"] <- median(Heart.df$ca, na.rm = TRUE)
+Heart.df$thal[is.na(Heart.df$thal)] <- median(Heart.df$thal, na.rm = TRUE)
+Heart.df$thal[Heart.df$thal == "?"] <- median(Heart.df$ca, na.rm = TRUE)
+```
+
+Check for duplicate entries in the dataframe and print them out
+```{r}
+dupes <- Heart.df[duplicated(Heart.df) | duplicated(Heart.df, fromLast = TRUE), ]
+# Print or inspect the duplicate entries
+print(dupes)
+```
+
+Convert categorical attributes to factors
+```{r factorization}
+# Define a list of categorical columns with their levels and labels
+categorical_columns <- list(
+  sex = list(levels = c(0, 1), labels = c("Female", "Male")),
+  cp = list(levels = c(1, 2, 3, 4), labels = c("Typical Angina", "Atypical Angina", "Non-Angina", "Asymptomatic")),
+  fbs = list(levels = c(0, 1), labels = c("False", "True")),
+  restecg = list(levels = c(0, 1, 2), labels = c("Normal", "Wave-abnormality", "Probable")),
+  exang = list(levels = c(0, 1), labels = c("No", "Yes")),
+  slope = list(levels = c(1, 2, 3), labels = c("Upsloping", "Flat", "Downsloping")),
+  thal = list(levels = c(3, 6, 7), labels = c("Normal", "Fixed Defect", "Reversible")),
+  target = list(levels = c(1, 0), labels = c("Yes", "No"))
+)
+
+# Apply the factor transformation using a loop
+for (col in names(categorical_columns)) {
+  Heart.df[[col]] <- factor(Heart.df[[col]], 
+                            levels = categorical_columns[[col]]$levels, 
+                            labels = categorical_columns[[col]]$labels)
+}
+```
+
+Row 
+
+### **EDA through Visualization** <br> **Barplots**
+
+```{r bar_function, echo=FALSE}
+HeartDiseaseBar <- function(var) {
+  ggplot(Heart.df, aes(x = .data[[var]], fill = target)) +
+    geom_bar(position = "dodge") + theme_test() +
+    labs(title = paste("Distribution of Heart Disease by", var),
+         x = var, fill = "Heart Disease")
+}
+```
+
+Create the distribution of heart disease by categorical variables
+```{r, echo=FALSE}
+# Create the plots
+g1 <- ggplot(Heart.df, aes(x=target, fill=target))+
+  geom_bar() + theme_test() +
+  ggtitle("Distribution of Heart Disease") +
+  labs(x = "Heart Disease", fill = "Heart Disease")
+g2 <- HeartDiseaseBar("sex")
+g3 <- HeartDiseaseBar("cp")
+g4 <- HeartDiseaseBar("fbs")
+g5 <- HeartDiseaseBar("restecg")
+g6 <- HeartDiseaseBar("exang")
+g7 <- HeartDiseaseBar("slope")
+g8 <- HeartDiseaseBar("thal")
+```
+
+### Combine plot using patchwork
+```{r, fig.width = 12, fig.height = 16, echo=FALSE}
+(g1 | g2) /
+(g3 | g4) /
+(g5 | g6) /
+(g7 | g8)
+```
 
 ***
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
+**Bar Plots Interpretation and Analysis**
 
 
-### **Modeling**
+### **EDA through Visualization** <br> **Histogram Distributions**
+
+```{r histogram_function, echo=FALSE}
+HeartDiseaseHist <- function(var1) {
+  ggplot(Heart.df, aes(x = .data[[var1]], fill = target)) +
+    geom_histogram(bins = 15) + theme_test() +
+    labs(title = paste("Distribution of", var1),
+         x = var1, fill = "Heart Disease")
+}
+```
+
+Create histogram distributions of continuous variables.  
+```{r, fig.width = 12, fig.height = 12}
+# Create the plots
+p1 <- HeartDiseaseHist("age")
+p2 <- HeartDiseaseHist("trestbps")
+p3 <- HeartDiseaseHist("chol")
+p4 <- HeartDiseaseHist("thalach")
+p5 <- HeartDiseaseHist("oldpeak")
+
+# Combine plot using patchwork
+(p1) /
+(p2 | p3) /
+(p4 | p5)
+```
+
+**Histogram Plots Interpretation and Analysis**
+
+
+### **EDA through Visualization** <br> **Boxplots**
+
+```{r boxplot_function, echo=FALSE}
+HeartDiseaseBoxplot <- function(var1, var2) {
+  ggplot(Heart.df, aes(x = .data[[var1]],
+                       y = .data[[var2]],
+                       fill = .data[[var1]])) +
+    geom_boxplot() + theme_test() +
+    labs(title = paste("Boxplot of", var2, "by", var1),
+         x = var1, y = var2, fill = "Heart Disease")
+}
+```
+
+Create boxplots of continuous variables.  
+```{r, fig.width = 12, fig.height = 12}
+# Create the plots
+p1 <- HeartDiseaseBoxplot("target", "age")
+p2 <- HeartDiseaseBoxplot("target", "trestbps")
+p3 <- HeartDiseaseBoxplot("target", "chol")
+p4 <- HeartDiseaseBoxplot("target", "thalach")
+p5 <- HeartDiseaseBoxplot("target", "oldpeak")
+
+# Combine plot using patchwork
+(p1 | p2) /
+(p3 | p4) /
+(p5)
+```
+
+**Box Plots Interpretation and Analysis**
+
+
+### **EDA through Visualization** <br> **Scaterplots**
+
+```{r scatterfunction, echo=FALSE}
+HeartDiseaseScatter <- function(point1, point2){
+  ggplot(Heart.df, aes(x = .data[[point1]],
+                       y = .data[[point2]],
+                       color = target)) +
+    geom_point(size = 2) + theme_test() +
+    geom_smooth(method = "lm", se = FALSE, color = "blue", formula = y ~ x) +
+    labs(title = paste("Scatterplot of", point1, "by", point2),
+       x = point1, y = point2, color = "Heart Disease")
+}
+```
+
+Create scatterplots of continuous variables. 
+```{r scatterplot, fig.width = 12, fig.height = 16}
+# Create the plots
+p1 <- HeartDiseaseScatter("age", "oldpeak")
+p2 <- HeartDiseaseScatter("age", "chol")
+p3 <- HeartDiseaseScatter("age", "trestbps")
+p4 <- HeartDiseaseScatter("age", "thalach")
+p5 <- HeartDiseaseScatter("chol", "thalach")
+p6 <- HeartDiseaseScatter("trestbps", "chol")
+p7 <- HeartDiseaseScatter("thalach", "oldpeak")
+
+# Combine plot using patchwork
+(p1 | p2) /
+(p3 | p4) /
+(p5 | p6) /
+(p7)
+```
+
+**Scatter Plots Interpretation and Analysis**
+
+
+### **EDA through Visualization** <br> **Pair Plots**
+
+Pairwise relationship between multiple continuous variables
+```{r pair_plots, fig.width = 12, fig.height = 6}
+# Create a colored pair plot for selected variables
+ggpairs(Heart.df[, c("age", "trestbps", "chol", 
+                     "thalach", "oldpeak", "target")], 
+        aes(color = target, fill = target))
+```
+
+**Pair Plots Interpretation and Analysis**
+
+
+### **EDA through Visualization** <br> **Correlation Matrix**
+
+Correlation matrix for continuous variables
+```{r correlation_matrix}
+# Selecting only continuous variables
+continuous_vars <- c("age", "trestbps", "chol", "thalach", "oldpeak")
+continuous_data <- Heart.df %>% select(all_of(continuous_vars))
+
+# Calculating correlation matrix
+correlation_matrix <- cor(continuous_data)
+```
+
+***
+
+```{r}
+# Plotting the correlation matrix
+corrplot(correlation_matrix, method = "circle",
+         type = "lower", tl.col = "black")
+```
+
+
+### **Modeling** <br> <br>**Logistic Regression**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
 
@@ -135,28 +516,6 @@ An ensemble method that combines multiple decision trees to improve prediction a
 
 
 ### **Evaluation**
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
-
-Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
-
-***
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
-
-
-### **Tune Modeling**
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
-
-Praesent tempor ullamcorper odio, ac accumsan felis blandit convallis. Nunc accumsan massa arcu, id maximus tellus sollicitudin ac. Nullam pulvinar bibendum enim ut rutrum. Praesent ac dignissim nulla, ac varius mi. Aliquam eu dui metus. Morbi diam lectus, tincidunt eu dui at, finibus fermentum magna. Quisque mollis ullamcorper nibh. Ut commodo, nulla nec imperdiet ullamcorper, tellus enim eleifend est, quis pulvinar sapien ipsum consequat felis.
-
-***
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
-
-
-### **Re-Evaluation**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a interdum massa. In hac habitasse platea dictumst. Cras dictum erat urna, a gravida arcu posuere nec. Sed in dignissim lacus. Suspendisse ut ipsum sit amet dolor consectetur pretium. Nulla ut gravida velit. Mauris arcu nulla, ultricies ac velit quis, venenatis cursus ante. Suspendisse pellentesque porta ipsum. Vestibulum at sem eget lorem bibendum euismod eu ut felis. Nulla sollicitudin tortor sed dui efficitur, a pellentesque neque euismod. Fusce vel arcu lacinia, lobortis elit eu, pretium nunc. Donec ut nunc sit amet felis mattis fringilla. Ut luctus odio id ligula hendrerit, at dignissim enim rutrum. Nunc dapibus nunc eu sapien congue, a egestas dui vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultrices in tortor a porttitor.
 
