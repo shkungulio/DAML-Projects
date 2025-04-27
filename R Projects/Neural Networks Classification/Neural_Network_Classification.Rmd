@@ -1,6 +1,6 @@
 ---
 title: "Neural Network Classification"
-author: "by Seif Kungulio"
+author: "Seif Kungulio"
 #date: "2025-02-08"
 output: html_document
 ---
